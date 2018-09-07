@@ -1,3 +1,8 @@
 # pullup
 Parking reservation system
-#ronald
+
+
+npm install
+npm start
+
+
