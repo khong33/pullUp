@@ -1,11 +1,15 @@
-# pullup
-Parking reservation system
+# pullup - Parking reservation system
 
-
+Getting started
+```
 npm install
 npm start
+```
 
 
+Sample JSON formats
+
+```
 // USER TABLE
 {
     "u_id": "leoson",
@@ -18,7 +22,8 @@ npm start
     "s_id": "13", // Current Reserved Spot ID
     "history": ["4", "3", "2", "1"] // Past Reservation Records (R_IDs)
 }
-
+```
+```
 // RESERVATION TABLE
 {
     "r_id": "423", // unique reservation id
@@ -34,8 +39,9 @@ npm start
     },
     "payment": "$3.45"
 }
+```
 
-
+```
 // PARKING TABLE
 {
     "p_id": "41", // unique id for spot
@@ -55,7 +61,9 @@ npm start
     "photo": "", // user feedback
     "city": "Atlanta", 
 }
+```
 
+```
 // SPOT TABLE
 {
     "s_id": "23", // unique id for spot
@@ -67,4 +75,5 @@ npm start
     "location": "3rd floor corner", // User feedback 
     "city": "Atlanta", // Periphery 
 }
+```
 
