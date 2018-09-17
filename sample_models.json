@@ -1,11 +1,3 @@
-# pullup
-Parking reservation system
-
-
-npm install
-npm start
-
-
 // USER TABLE
 {
     "u_id": "leoson",
