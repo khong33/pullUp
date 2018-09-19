@@ -14,7 +14,7 @@ var parking = require('../models/spot')
 
   /* GET AVAILABILITY of SINGLE SPOT using  SPOT_ID */
   router.get('/:s_id', function(req, res, next) {
-    spot.findOneBySId(req.params.id, function (err, post) {
+    spot.findOneBySId(req.params.s_id, function (err, post) {
       if (err) return next(err);
       res.json(post);
     });
@@ -22,7 +22,7 @@ var parking = require('../models/spot')
 
   /* UPDATE AVAILABILTIY STATUS */
   router.put('/:s_id', function(req, res, next) {
-    spot.findBySIdAndUpdate(req.params.id, req.body, function (err, post) {
+    spot.findBySIdAndUpdate(req, function (err, post) {
       if (err) return next(err);
       res.json(post);
     });

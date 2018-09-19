@@ -3,16 +3,7 @@ var AWS = require('aws-sdk');
 var fs = require('fs');
 
 //Read config values from a JSON file.
-var config = fs.readFileSync('../credentials/aws_secrets', 'utf8');
-config = JSON.parse(config);
-
-AWS.config.update({
-	region : config.region,
-	endpoint : config.endpoint,
-	accessKeyId : config.accessKeyId,
-	secretAccessKey : config.secretAccessKey
-});
-
+AWS.config.loadFromPath('./credentials/aws_secrets.json');
 
 //create a client object for dynamoDB
 var dynamodb = new AWS.DynamoDB();

@@ -14,6 +14,7 @@
 // RESERVATION TABLE
 {
     "r_id": "423", // unique reservation id
+    "s_id": "23",
     "u_id": "3", // Spot 23 is part of p_id:3
     "p_id": "4",
     "start": "2018-9-3-10-20",
@@ -51,10 +52,10 @@
 // SPOT TABLE
 {
     "s_id": "23", // unique id for spot
-    "past_status": [],
     "current_status": "reserved", // status ["reserved" , "available", "unknown"]
-    "future_status": [],
-    "next_avail": "",
+    "timeline": {
+        "0"
+    },
     "p_id": "3", // Spot 23 is part of p_id:3
     "location": "3rd floor corner", // User feedback 
     "city": "Atlanta", // Periphery 

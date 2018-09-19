@@ -10,6 +10,8 @@ var parkingRouter = require('./routes/parking');
 var spotRouter = require('./routes/spot');
 var reservationRouter = require('./routes/reservation');
 
+var test = require('./models/user')
+
 var app = express();
 
 // view engine setup
@@ -42,9 +44,12 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  console.log(err)
+  // res.render('error');
 });
 
+console.log("Listening at localhost:3000")
+app.listen(process.env.PORT || 3000);
 module.exports = app;
 
 
