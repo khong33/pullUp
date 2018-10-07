@@ -10,8 +10,6 @@ var dynamodb = new AWS.DynamoDB();
 var docClient = new AWS.DynamoDB.DocumentClient();
 
 
-
-
 // findParkingById
 // findParkingByLocation
 

@@ -2,6 +2,13 @@ var express = require('express');
 var router = express.Router();
 var parking = require('../models/parking')
 
+
+
+// router.get('/', function(req, res) {
+//   res.render('reservation');
+// });
+
+
 // p_id: parking id
 
 /* GET THE PARKING LOT BY P_ID */

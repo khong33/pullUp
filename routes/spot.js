@@ -4,7 +4,14 @@ var parking = require('../models/spot')
 
 // s_id: spot id
 
-  /* GET AVAILABILITY of ALL SPOTS using  PARKING_ID */
+
+
+// template
+router.get('/', function(req, res, next) {
+  res.render('spots');
+ });
+
+  /* GET AVAILABILITY of ALL SPOTS using PARKING_ID */
   router.get('/spots/:p_id', function(req, res, next) {
     spot.findAllByPId(req.params.id, function (err, post) {
       if (err) return next(err);
@@ -12,7 +19,7 @@ var parking = require('../models/spot')
     });
   });
 
-  /* GET AVAILABILITY of SINGLE SPOT using  SPOT_ID */
+  /* GET AVAILABILITY of SINGLE SPOT using SPOT_ID */
   router.get('/:s_id', function(req, res, next) {
     spot.findOneBySId(req.params.s_id, function (err, post) {
       if (err) return next(err);
@@ -27,7 +34,7 @@ var parking = require('../models/spot')
       res.json(post);
     });
   });
-  
+
   /* DELETE BOOK */
   router.delete('/:s_id', function(req, res, next) {
     spot.findBySIdAndRemove(req.params.id, req.body, function (err, post) {

@@ -5,10 +5,7 @@ var reservation = require('../models/reservation')
 
   /* GET ALL USER ID */
   router.get('/', function(req, res, next) {
-    user.findAllUsers(function (err, info) {
-      if (err) return next(err);
-      res.json(info);
-    });
+    res.render('user');
   });
 
   
