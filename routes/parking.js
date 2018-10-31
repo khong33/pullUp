@@ -26,6 +26,13 @@ router.post('/loc', function(req, res, next) {
       res.json(products);
     });
   });
+  
+
+/* GET ALL PARKING LOTS NEAR CURRENT LOCATION */
+router.post('/', parking_controller.parking_create_post);
+
+
+
 
 module.exports = router;
 
