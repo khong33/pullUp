@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var reservation = require('../models/reservation_model')
+var reservation = require('../models/reservation_model');
 
  /* GET ALL RESERVATIONS */
  router.get('/', function(req, res, next) {

@@ -9,6 +9,7 @@ var user_router = require('./routes/user_router');
 var parking_router = require('./routes/parking_router');
 var spot_router = require('./routes/spot_router');
 var reservation_router = require('./routes/reservation_router');
+var register_router = require('./routes/register_router');
 
 var app = express();
 
@@ -27,6 +28,7 @@ app.use('/user', user_router);
 app.use('/spot', spot_router);
 app.use('/reservation', reservation_router);
 app.use('/parking', parking_router);
+app.use('/register', register_router);
 
 
 // catch 404 and forward to error handler
