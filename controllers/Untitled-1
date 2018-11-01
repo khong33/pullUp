@@ -1,0 +1,42 @@
+// TEMPLATES
+
+// create_parkinglot
+{
+	"S_UUID": {
+        "SS": ["1", "2", "3"]
+    },
+    "latitude": {
+        "S" : "33.776221"
+    },
+    "longitude": {
+        "S" : "-84.403867"
+    },
+    "name" : {
+         "S" : "Campus Recreation Center Parking Deck"
+    },
+    "hourly" : {
+        "S": "$3.43"
+    },
+    "city" : {
+        "S" : "Atlanta"
+    },
+    "zip" : {
+        "S" : "30318"
+    },
+    "type" : {
+        "S": "public"
+    }
+}
+
+
+{
+	"P_UUID": {
+		"S": "A33WEF4"
+	},
+	"STR_FIELD": {
+		"S": "AHA"
+	},
+	"NUM_FIELD": {
+		"S":"HEEH"
+	}
+}
