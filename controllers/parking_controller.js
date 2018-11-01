@@ -1,5 +1,5 @@
-const parking_model = require('../models/parking');
-const spot_model = require('../models/spot');
+const parking_model = require('../models/parking_model');
+const spot_model = require('../models/spot_model');
 
 
 exports.create_parkinglot = async (req, res, next) => {
@@ -19,15 +19,22 @@ exports.create_parkinglot = async (req, res, next) => {
 }
 
 
-exports.get_parkinglot_byid = async (req, res, next) => {
+exports.get_parkinglot_by_id = async (req, res, next) => {
     parking_model.get_by_id(req.params, res)
         .then(obj => res.send(obj))
         .catch(err => next(err));
 }
 
-exports.delete_parkinglot_byid = async (req, res, next) => {
+exports.get_parkinglot_by_coord = async (req, res, next) => {
+    parking_model.get_by_coord(req.params, res)
+        .then(obj => res.send(obj))
+        .catch(err => next(err));
+}
+
+exports.delete_parkinglot_by_id = async (req, res, next) => {
     parking_model.delete_by_id(req.params, res)
         .then(obj => res.send(obj))
         .catch(err => next(err));
+    // TODO: implement delete associated S_UUIDs
 }
 

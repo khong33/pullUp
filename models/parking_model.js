@@ -41,7 +41,7 @@ const create_spots = (count) => {
 }
 
 
-const get_by_id = (params) => {
+exports.get_by_id = (params) => {
   return new Promise((resolve, reject) => {
     if (!params|| !params.id) {
       return reject("Requirement for the body not satisfied");
@@ -60,7 +60,7 @@ const get_by_id = (params) => {
   });
 };
 
-const create_single = (body) => {
+exports.create_single = (body) => {
   return new Promise((resolve, reject) => {
     if (!body) {
       return reject("Requirement for the body not satisfied");
@@ -82,9 +82,21 @@ const create_single = (body) => {
   });
 };
 
+exports.get_by_coord = (params) => {
+  return new Promise((resolve, reject) => {
+    if (!params|| !params.long || !params.lat) {
+      return reject("Requirement for the body not satisfied");
+    }
+    const long = params.long;
+    const lat = params.lat;
+    // TODO: COORDINATE BASED SEARCH
+    // get zip code
+    // find near by parking lot objects
 
-const delete_by_id = (params) => {
+  });
+};
 
+exports.delete_by_id = (params) => {
   return new Promise((resolve, reject) => {
     if (!params|| !params.id) {
       return reject("Requirement for the body not satisfied");
@@ -102,7 +114,3 @@ const delete_by_id = (params) => {
   });
 };
 
-
-
-
-module.exports = {create_single, get_by_id, delete_by_id}

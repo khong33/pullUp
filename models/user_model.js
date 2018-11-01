@@ -1,7 +1,7 @@
 var async = require('async');
 var AWS = require('aws-sdk');
 var fs = require('fs');
-var reservation = require('./reservation')
+var reservation = require('./reservation_model')
 
 //Read config values from a JSON file.
 AWS.config.loadFromPath('./credentials/aws_secrets.json');
