@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var user = require('../models/user')
-var reservation = require('../models/reservation')
+var user = require('../models/user_model')
+var reservation = require('../models/reservation_model')
 
   /* GET ALL USER ID */
   router.get('/', function(req, res, next) {
