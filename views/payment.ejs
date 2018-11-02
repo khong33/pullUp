@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Shoes</title>
+</head>
+<body>
+  <h1>Reserve "My Shoes"</h1>
+  <p>Ronald is the best to ever do it!</p>
+
+  <!-- this is copied from the Stripe checkout embed -->
+  <form action="/charge" method="post">
+    <script
+      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+      data-key="pk_test"
+      data-amount="999"
+      data-currency="usd"
+      data-name="my company"
+      data-description="my book"
+      data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+      data-locale="auto"
+      data-label="im really that dude"
+      data-zip-code="true">
+    </script>
+  </form>
+  <!-- end of Stripe embed -->
+
+</body>
+</html>
