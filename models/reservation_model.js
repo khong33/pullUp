@@ -66,7 +66,7 @@ var params = {
 		successful_create.P_UUID = R_UUID;
 		successful_create.P_UUID = U_UUID;
 		successful_create.S_UUID = S_UUID;
-		resolve(successful_create);
+		return resolve(successful_create);
 	  });
 	});
   };
@@ -84,32 +84,5 @@ function findById(req, res) {
 	})
 }
 
-
-function reserve_singles(req, res) {
-	return new Promise((resolve, reject) => {
-	  if (!body || !body.U_UUID || !body.R_UUID || !body.P_UUID || !body.S_UUID) {
-		return reject("Requirement for the body not satisfied");
-	  }
-	  put_params.Item = body;
-	  put_params.Item["r_UUID"] = {"S": R_UUID};
-	  put_params.Item["s_UUID"] = {"SS": S_UUID};
-	  put_params.Item["u_UUID"] = {"S": U_UUID};
-	  put_params.Item["p_UUID"] = {"S": P_UUID};
-	  dynamodb.putItem(put_params, function (err, response) {
-		if (err) {
-		  reject(err);
-		}
-		successful_create.message = "Successfully created a reservation";
-		successful_create.P_UUID = P_UUID;
-		successful_create.P_UUID = R_UUID;
-		successful_create.P_UUID = U_UUID;
-		successful_create.S_UUID = S_UUID;
-		resolve(successful_create);
-	  });
-	});
-  };
-
-
-  reserve_singles(34345,2424,2424);
 
 module.exports = {findById}
