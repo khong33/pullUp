@@ -1,77 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="author" content="Kodinger">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>My Login Page</title>
-    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/my-login.css">
-</head>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<!-- <script src="//code.jquery.com/jquery-1.11.1.min.js"></script> -->
+<!------ Include the above in your HEAD tag ---------->
 
-<body class="my-login-page">
-    <section class="h-100">
-        <div class="container h-100">
-            <div class="row justify-content-md-center h-100">
-                <div class="card-wrapper">
-                    <div class="brand">
-
-
+<div class="container" id="wrap">
+	  <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <form action="r" method="post" accept-charset="utf-8" class="form" role="form">   <legend>Sign Up</legend>
+                    <h4>It's free and always will be.</h4>
+                    <div class="row">
+                        <div class="col-xs-6 col-md-6">
+                            <input type="text" id="fname" name="firstname" value="" class="form-control input-lg" placeholder="First Name"  />                        </div>
+                        <div class="col-xs-6 col-md-6">
+                            <input type="text" id="lname" name="lastname" value="" class="form-control input-lg" placeholder="Last Name"  />                        </div>
                     </div>
-                    <div class="card fat">
-                        <div class="card-body">
-                            <h4 class="card-title">Login</h4>
-                            <form method="POST" class="my-login-validation" novalidate="">
-                                <div class="form-group">
-                                    <label for="email">E-Mail Address</label>
-                                    <input id="email" type="email" class="form-control" name="email" value="" required autofocus>
-                                    <div class="invalid-feedback">
-                                        Email is invalid
-                                    </div>
-                                </div>
-								<!-- <input type = 'text' id = 'fname' placeholder="Enter first name" /> -->
-                                <div class="form-group">
-                                    <label for="password">Password
-                                        <a href="forgot.html" class="float-right">
-                                            Forgot Password!?
-                                        </a>
-                                    </label>
-                                    <input id="password" type="password" class="form-control" name="password" required data-eye>
-                                    <div class="invalid-feedback">
-                                        Password is required
-                                    </div>
-                                </div>
+                    <input type="text" id="email" name="email" value="" class="form-control input-lg" placeholder="Your Email"  />
+                    <input type="password" id="passwords" name="password" value="" class="form-control input-lg" placeholder="Password"  />
+                    <input type="password" id="confirmpasswords" name="confirm_password" value="" class="form-control input-lg" placeholder="Confirm Password"  />                                       <div class="row">
 
-                                <div class="form-group">
-                                    <div class="custom-checkbox custom-control">
-                                        <input type="checkbox" name="remember" id="remember" class="custom-control-input">
-                                        <label for="remember" class="custom-control-label">Remeber Me</label>
-                                    </div>
-                                </div>
+                        <div class="col-xs-4 col-md-4">
+              <span class="help-block">By clicking Create my account, you agree to our Terms and that you have read our Data Use Policy, including our Cookie Use.</span>
+                    <button class="btn btn-lg btn-primary btn-block signup-btn" type="submit">
+                        Create my account</button>
+            </form>          
+          </div>
 
-                                <div class="form-group m-0">
-                                    <button type="submit" class="btn btn-primary btn-block">
-                                        Login
-                                    </button>
-                                </div>
-                                <div class="mt-4 text-center">
-                                    Don't have an account? <a href="register.ejs">Create One</a>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="footer">
-                        Copyright &copy; 2017 &mdash; Your Company 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <script src="js/jquery.min.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/my-login.js"></script>
-</body>
-</html>
-
-
+        </div>            
+</div>
+    <script>
+            var input_fname = document.getElementById("fname").value;
+            console.log("first name: ", input_fname);
+    </script>
+</div>
