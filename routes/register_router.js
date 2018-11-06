@@ -6,7 +6,7 @@ var register = require('../models/registration_model');
 
 
 
-router.post('/:id/', registration_controller.create_signup_byid);
+router.post('/', registration_controller.create_userobj);
 
 module.exports = router;
 
