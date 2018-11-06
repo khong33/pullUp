@@ -6,7 +6,7 @@ var router = express.Router();
 
 // landing page is login
 router.get('/', function(req, res) {
-  res.render('login');
+  res.render('register');
 });
 
 
