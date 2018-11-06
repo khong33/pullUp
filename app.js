@@ -1,15 +1,13 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-var index_router = require('./routes/index_router');
-var user_router = require('./routes/user_router');
-var parking_router = require('./routes/parking_router');
-var spot_router = require('./routes/spot_router');
-var reservation_router = require('./routes/reservation_router');
-var register_router = require('./routes/register_router');
+const index_router = require('./routes/index_router');
+const user_router = require('./routes/user_router');
+const parking_router = require('./routes/parking_router');
+const spot_router = require('./routes/spot_router');
+const reservation_router = require('./routes/reservation_router');
 
 var app = express();
 
@@ -26,10 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index_router);
 app.use('/user', user_router);
 app.use('/spot', spot_router);
-app.use('/reservation', reservation_router);
 app.use('/parking', parking_router);
-app.use('/register', register_router);
-
 
 // catch 404 and forward to error handler
 app.use(function(err, req, res, next) {
@@ -44,8 +39,6 @@ app.use(function(err, req, res, next) {
 
 console.log("Listening at localhost:3000")
 app.listen(process.env.PORT || 3000);
-
-
 
 module.exports = app;
 

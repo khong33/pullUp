@@ -1,36 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var user = require('../models/user_model')
-var reservation = require('../models/reservation_model')
+const express = require('express');
+const router = express.Router();
+const user_controller = require('../controllers/user_controller')
 
-  /* GET ALL USER ID */
-  router.get('/', function(req, res, next) {
-    res.render('user');
-  });
-
-  
-  /* GET INFORMATION BY USER ID */
-  router.get('/:u_id', function(req, res, next) {
-    user.findInfoById(req.params.u_id, function (err, info) {
-      if (err) return next(err);
-      console.log(info)
-      res.render('profile.ejs', info.Item);
-    });
-  });
-
-
-  /* GET RESERVATION BY USER ID */
-  router.get('/res/:u_id', function(req, res, next) {
-    user.findReservationById(req.params.u_id, function (err, info) {
-      if (err) return next(err);
-      var infoObj = JSON.parse(JSON.stringify(info, null, 2));
-
-      // Calling the reservation findById
-      reservation.findById(infoObj.Item.r_id, function(err, info) {
-        if (err) return next(err);
-        res.render('reservation.ejs', info.Item)
-      });
-    });
-  });
+router.post('/register', user_controller.create_user);
+// router.get('/profile/:username', user_controller.get_user);
 
 module.exports = router;
