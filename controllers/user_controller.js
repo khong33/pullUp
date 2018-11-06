@@ -1,10 +1,27 @@
-const user_model = require('../models/user_model');
+const userModel = require('../models/user_model');
+const attr = require('dynamodb-data-types').AttributeValue;
 
-
-
-exports.create_user = async (req, res, next) => {
+exports.createUser = async (req, res, next) => {
     // boolean: user_duplicate_check()
-    user_model.create_signup(req.body, res)
+    userModel.create_signup(req.body, res)
         .then(obj => res.send(obj))
+        .catch(err => next(err));
+}
+
+exports.processLogin = async (req, res, next) => {
+    // req.id
+    // req.pw
+    // 1) hash req.hashed_id to get the UUID
+    // 2) get UUID's hashed_pw
+    // 2) req.hashed_pw  == hashed_pw
+}
+
+exports.showProfile = async (req, res, next) => {
+    const UUID = req.params.UUID;
+    userModel.findByUUID(UUID)
+        .then(obj => {
+            const unwrappedObj = attr.unwrap(obj.Item);
+            res.render('user', {"item": unwrappedObj})
+        })
         .catch(err => next(err));
 }

@@ -16,6 +16,25 @@ var update_body = {
   TableName : 'user',
 };
 
+var get_params = {
+  Key: {},
+  TableName : 'user'
+};
+
+exports.findByUUID = (UUID) => {
+  return new Promise((resolve, reject) => {
+    get_params.Key.UUID = {"S": UUID};
+    dynamodb.getItem(get_params, function (err, response) {
+      if (err) {
+        return reject(err);
+      }
+      if ('{}' === JSON.stringify(response)) {
+        return reject("Error: Unidenfied UUID");
+      }
+      return resolve(response);
+    });
+  });
+};
 
 exports.create_signup = (body) => {
   return new Promise((resolve, reject) => {
@@ -38,29 +57,3 @@ exports.create_signup = (body) => {
     });
   });
 };
-
-
-// //Add signup form data to database.
-// var post_signup = function (reg_ids, emails, firstnames, lastnames, passwords, ) {
-//         var formData = {
-//           TableName: registration,
-//           Item: {
-//             reg_id: {'S': reg_ids}, 
-//             email: {'S': emails},
-//             firstname: {'S': firstnames}, 
-//             lastname: {'S': lastnames},
-//             password: {'S': passwords}
-//           }
-//         };
-//         dynamodb.putItem(formData, function(err, data) {
-//           if (err) {
-//             console.log("users::save::error - " + JSON.stringify(err, null, 2));
-//           } else {
-//             console.log('Form data added to database.');
-//           }
-//         });
-      
-//       }
-
-      //module.exports = {post_signup}
-
