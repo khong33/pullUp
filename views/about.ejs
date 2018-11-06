@@ -17,29 +17,10 @@
 
     <!-- Custom styles for this template -->
     <link href="css/main.css" rel="stylesheet">
-
   </head>
 
   <body>
-
-    <script type="text/javascript">
-
-
-      const routeToProfile = () => {
-        if (typeof(Storage) !== "undefined") {
-          window.location.replace("/user/sample");
-        }
-        let email = sessionStorage.getItem("email")
-        if (!email) {
-          window.location.replace("/user/sample");
-        } else {
-          window.location.replace("/user/" + email);
-        }
-      }
-
-    </script>
-
-
+    <script type="text/javascript" src="js/router.js"></script>
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
