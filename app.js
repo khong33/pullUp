@@ -3,11 +3,11 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const index_router = require('./routes/index_router');
-const user_router = require('./routes/user_router');
-const parking_router = require('./routes/parking_router');
-const spot_router = require('./routes/spot_router');
-const reservation_router = require('./routes/reservation_router');
+const indexRouter = require('./routes/indexRouter');
+const userRouter = require('./routes/userRouter');
+const parkingRouter = require('./routes/parkingRouter');
+const spotRouter = require('./routes/spotRouter');
+const reservationRouter = require('./routes/reservationRouter');
 
 var app = express();
 
@@ -21,10 +21,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index_router);
-app.use('/user', user_router);
-app.use('/spot', spot_router);
-app.use('/parking', parking_router);
+app.use('/', indexRouter);
+app.use('/user', userRouter);
+app.use('/parking', parkingRouter);
+app.use('/spot', spotRouter);
+app.use('/reservation', reservationRouter);
 
 // catch 404 and forward to error handler
 app.use(function(err, req, res, next) {

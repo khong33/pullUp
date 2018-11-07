@@ -1,4 +1,5 @@
-const user_controller = require('./user_controller');
+const user_controller = require('./userController');
+
 
 exports.showAbout = (req, res, next) => {
     res.render('about');

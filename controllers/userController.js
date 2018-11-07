@@ -1,4 +1,4 @@
-const userModel = require('../models/user_model');
+const userModel = require('../models/userModel');
 const attr = require('dynamodb-data-types').AttributeValue;
 
 exports.createUser = async (req, res, next) => {

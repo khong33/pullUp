@@ -47,16 +47,16 @@ var params = {
   } 
 
 
-  exports.reserve_single = (body) => {
+  exports.createOne = (body) => {
 	return new Promise((resolve, reject) => {
 	  if (!body || !body.U_UUID || !body.R_UUID || !body.P_UUID || !body.S_UUID) {
 		return reject("Requirement for the body not satisfied");
 	  }
 	  put_params.Item = body;
-	  put_params.Item["r_UUID"] = {"S": R_UUID};
-	  put_params.Item["s_UUID"] = {"SS": S_UUID};
-	  put_params.Item["u_UUID"] = {"S": U_UUID};
-	  put_params.Item["p_UUID"] = {"S": P_UUID};
+	  put_params.Item["R_UUID"] = {"S": R_UUID}; // Reservation ID
+	  put_params.Item["S_UUID"] = {"SS": S_UUID}; // Spot ID
+		put_params.Item["P_UUID"] = {"S": U_UUID}; //
+		put_params.Item["U_UUID"] = 
 	  dynamodb.putItem(put_params, function (err, response) {
 		if (err) {
 		  reject(err);
