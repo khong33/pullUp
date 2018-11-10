@@ -38,3 +38,19 @@ exports.delete_parkinglot_by_id = async (req, res, next) => {
     // TODO: implement delete associated S_UUIDs
 }
 
+exports.findNearByParking = async (req, res, next) => {
+    const long =  req.params.long;
+    const lat = req.params.lat;
+    const zip = req.params.zip;
+
+
+}
+
+
+const findDistance = (origin, destination) => {
+//https://maps.googleapis.com/maps/api/distancematrix/json?origins= <ORIGIN> &destinations=San+Francisco|Victoria+BC&key=YOUR_API_KEY
+}
+
+
+
+
