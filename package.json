@@ -10,7 +10,6 @@
     "aws-sdk": "^2.310.0",
     "bluebird": "^3.5.2",
     "body-parser": "^1.18.3",
-    "bootstrap": "^3.3.7",
     "cookie-parser": "~1.4.3",
     "crypto": "^1.0.1",
     "debug": "~2.6.9",
@@ -22,8 +21,8 @@
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
     "nodemon": "^1.18.4",
+    "request": "^2.88.0",
     "save": "^2.3.2",
-    "startbootstrap-simple-sidebar": "^4.1.1",
     "stripe": "^6.13.0",
     "sync": "^0.2.5",
     "uuid": "^3.3.2"

@@ -3,7 +3,6 @@ const reservationController = require('./reservationController');
 const attr = require('dynamodb-data-types').AttributeValue;
 
 exports.createUser = async (req, res, next) => {
-    // boolean: user_duplicate_check()
     userModel.postById(req.body, res)
         .then(obj => res.send(obj))
         .catch(err => next(err));
@@ -32,11 +31,5 @@ exports.getUser = async (req, res, next) => {
 }
 
 exports.updateUser = async (req, res, next) => {
-    // const UUID = req.params.UUID;
-    // userModel.findByUUID(UUID)
-    //     .then(obj => {
-    //         const unwrappedObj = attr.unwrap(obj.Item);
-    //         res.send(unwrappedObj);
-    //     })
-    //     .catch(err => next(err));
+
 }

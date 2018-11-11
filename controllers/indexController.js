@@ -1,4 +1,4 @@
-const user_controller = require('./userController');
+const userController = require('./userController');
 
 
 exports.showAbout = (req, res, next) => {
@@ -10,5 +10,5 @@ exports.showLogin = (req, res, next) => {
 }
 
 exports.attemptLogin = (req, res, next) => {
-    user_controller.process_login(req.body);
+    userController.process_login(req.body);
 }
