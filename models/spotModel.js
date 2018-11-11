@@ -69,6 +69,7 @@ exports.post_byid = (params) => {
 
 exports.get_byid = (params) => {
   return new Promise((resolve, reject) => {
+    console.log(params);
     if (!params|| !params.id) {
       return reject("Requirement for the body not satisfied");
     }

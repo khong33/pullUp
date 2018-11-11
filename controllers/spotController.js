@@ -1,10 +1,10 @@
 const spotModel = require('../models/spotModel');
-
+const attr = require('dynamodb-data-types').AttributeValue;
 
 
 exports.get_spot_byid = async (req, res, next) => {
     spotModel.get_byid(req.params, res)
-        .then(obj => res.send(obj))
+        .then(obj => res.send(attr.unwrap(obj.Item)))
         .catch(err => next(err));
 }
 
