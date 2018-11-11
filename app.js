@@ -7,7 +7,6 @@ const userRouter = require('./routes/userRouter');
 const parkingRouter = require('./routes/parkingRouter');
 const spotRouter = require('./routes/spotRouter');
 const reservationRouter = require('./routes/reservationRouter');
-const logger = require('./config/logger').logger;
 
 let app = express();
 
@@ -25,7 +24,6 @@ app.use('/reservation', reservationRouter);
 
 // catch 404 and forward to error handler
 app.use(function(err, req, res, next) {
-  logger.error("Error Found");
   if (!err.stack) {
     res.status(500).send(err);
   } else {
