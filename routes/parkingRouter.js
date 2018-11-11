@@ -16,6 +16,6 @@ router.get('/:lon/:lat', parkingController.findNearByParking);
 /* DELETE - delete parking lot object by id */
 router.delete('/:puuid', parkingController.deleteParkingLot);
 
-router.post('/:puuid/:suuid', parkingController.createReservation);
+// router.post('/:puuid/:suuid', parkingController.createReservation);
 
 module.exports = router;

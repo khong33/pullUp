@@ -7,7 +7,7 @@ exports.createParkingLot = async (req, res, next) => {
     parkingModel.createSingle(body)
         .then(
             parkingResponse => {
-                const Spots = parkingResponse.Spots;
+                const Spots = parkingResponse.spots;
                 const PUUID = parkingResponse.PUUID;
                 var promises = [];
                 for (i = 0; i < Spots.length; i++) {

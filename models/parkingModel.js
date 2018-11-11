@@ -22,25 +22,24 @@ var successful_delete= {
   "PUUID": ""
 } 
 
-const createRandomSpots = (count) => {
-  var spotIds = [];
+var queryParams = {
+  ExpressionAttributeValues: {
+    ":c": {
+      S: "Atlanta"
+    }
+  }, 
+  KeyConditionExpression: "city = :c", 
+  ProjectionExpression: "type", 
+  TableName: "parking"
+ };
+
+
+
+
+const createSpots = (count) => {
+  const spots = [];
   for (i = 0; i < count; i++) {
-    spotIds.push(randUUID());
-  }
-  return spotIds;
-}
-
-
-const createSpots = (spotIds) => {
-  var spots = [];
-  for (i = 0; i < spotIds.length; i++) {
-    var spot = {
-      "SUUID": spotIds[i],
-      "floor" : Math.floor((Math.random() * 5) + 1),
-      "reservations": {}
-    };
-    spot = attr.wrap(spot);
-    spots.push({"M": spot});
+    spots.push(randUUID());
   }
   return spots;
 }
@@ -51,14 +50,16 @@ exports.getByPUUID = (params) => {
     if (!params|| !params.puuid) {
       return reject("Requirement for the body not satisfied");
     }
-    get_params.Key.PUUID = params.puuid
-    dynamodb.getItem(get_params, function (err, response) {
+    // get_params.Key.PUUID = params.puuid
+
+    dynamodb.query(queryParams, function (err, response) {
       if (err) {
         return reject(err);
       }
       if ('{}' === JSON.stringify(response)) {
         return reject("Error: Unidenfied PUUID");
       }
+      console.log(response);
       return resolve(response);
     });
   });
@@ -69,14 +70,11 @@ exports.createSingle = (body) => {
     if (!body) {
       return reject("Requirement for the body not satisfied");
     }
-    const spotCount = Number(body.spotCount.S);
-    const randomSpotIds = createRandomSpots(spotCount);
-    const ListOfSUUID = {"L": createSpots(randomSpotIds)};
+    const spots = createSpots(Number(body.spotCount.S));
     const PUUID = randUUID();
     put_params.Item = body;
     put_params.Item["PUUID"] = {"S": PUUID};
-    put_params.Item["spots"] = ListOfSUUID;
- 
+    put_params.Item["spots"] = {"SS": spots};
     dynamodb.putItem(put_params, function (err, response) {
       if (err) {
         reject(err);
@@ -84,7 +82,7 @@ exports.createSingle = (body) => {
       resolve({
         "Message": "Successfully instantiated " + PUUID,
         "PUUID": PUUID,
-        "Spots": randomSpotIds,
+        "spots": spots
       });
     });
   });
