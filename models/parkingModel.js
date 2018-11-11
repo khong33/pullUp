@@ -1,7 +1,9 @@
+const secret = require('../config/secret');
 const AWS = require('aws-sdk');
 const randUUID = require('uuid/v4');
 const dynamodb = new AWS.DynamoDB();
-AWS.config.loadFromPath('./credentials/aws_secrets.json');
+AWS.config.update(secret.AWS_CREDENTIALS);
+
 
 exports.getById = (params) => {
   return new Promise((resolve, reject) => {

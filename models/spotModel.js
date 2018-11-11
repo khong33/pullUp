@@ -1,11 +1,12 @@
+const logger = require('../config/logger');
+const secret = require('../config/secret');
 const AWS = require('aws-sdk');
 const randUUID = require('uuid/v4');
 const attr = require('dynamodb-data-types').AttributeValue;
 
-//Read config values from a JSON file.
-AWS.config.loadFromPath('./credentials/aws_secrets.json');
 
-//create a client object for dynamoDB
+AWS.config.update(secret.AWS_CREDENTIALS);
+
 var dynamodb = new AWS.DynamoDB();
 
 var delete_params = {

@@ -1,7 +1,9 @@
+const logger = require('../config/logger');
+const secret = require('../config/secret');
 const AWS = require('aws-sdk');
 const randUUID = require('uuid/v4');
 
-AWS.config.loadFromPath('./credentials/aws_secrets.json');
+AWS.config.update(secret.AWS_CREDENTIALS);
 const dynamodb = new AWS.DynamoDB();
 
 hashkey = "";

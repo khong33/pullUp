@@ -1,9 +1,11 @@
+const logger = require('../config/logger');
+const secret = require('../config/secret');
 const AWS = require('aws-sdk');
 const randUUID = require('uuid/v4');
 const attr = require('dynamodb-data-types').AttributeValue;
 const dynamodb = new AWS.DynamoDB();
 
-AWS.config.loadFromPath('./credentials/aws_secrets.json');
+AWS.config.update(secret.AWS_CREDENTIALS);
 
 exports.queryByDateSUUID = (keys) => {
     return new Promise((resolve, reject) => {
