@@ -56,12 +56,16 @@ exports.postById = (body) => {
 
 exports.deleteById = (params) => {
   return new Promise((resolve, reject) => {
-    if (!params|| !params.id) {
+    if (!params|| !params.PUUID) {
       return reject("Requirement for the body not satisfied");
     }
-    var PUUID = params.id;
-    get_params.Key["PUUID"] = {"S": PUUID};
-    dynamodb.deleteItem(get_params, function (err, response) {
+    var PUUID = params.PUUID;
+    const deleteParams = {
+      Key: {},
+      TableName : 'parking'
+    };
+    deleteParams.Key.PUUID = {"S": PUUID};
+    dynamodb.deleteItem(deleteParams, function (err, response) {
       if (err) {
         return reject("Error: Parking lot with PUUID: " + PUUID + " does not exist");
       }
