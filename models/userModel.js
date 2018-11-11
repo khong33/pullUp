@@ -1,13 +1,8 @@
-var AWS = require('aws-sdk');
-var crypto = require('crypto');
+const AWS = require('aws-sdk');
 const randUUID = require('uuid/v4');
-"use strict";
 
-//Read config values from a JSON file.
 AWS.config.loadFromPath('./credentials/aws_secrets.json');
-
-//create a client object for dynamoDB
-var dynamodb = new AWS.DynamoDB();
+const dynamodb = new AWS.DynamoDB();
 
 hashkey = "";
 
@@ -21,7 +16,7 @@ var get_params = {
   TableName : 'user'
 };
 
-exports.findByUUID = (UUID) => {
+exports.getById = (UUID) => {
   return new Promise((resolve, reject) => {
     get_params.Key.UUID = {"S": UUID};
     dynamodb.getItem(get_params, function (err, response) {
@@ -36,7 +31,7 @@ exports.findByUUID = (UUID) => {
   });
 };
 
-exports.create_signup = (body) => {
+exports.postById = (body) => {
   return new Promise((resolve, reject) => {
     if (!body|| !body.email || !body.first || !body.last || !body.pw) {
       return reject("Requirement for the body not satisfied");
@@ -56,4 +51,8 @@ exports.create_signup = (body) => {
       return resolve("Successfully created user " + UUID + " to registration table" );
     });
   });
+};
+
+
+exports.putById = (body) => {
 };

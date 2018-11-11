@@ -6,12 +6,12 @@ const reservationController = require('../controllers/reservationController');
 router.get('/:RUUID', reservationController.readReservation);
 router.post('/', reservationController.createReservation);
 /*
+    RUUID
     SUUID
     DATE
     TIME
     UUID
 */
 router.delete('/:RUUID', reservationController.deleteReservation);
-
 
 module.exports = router;

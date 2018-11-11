@@ -1,7 +1,6 @@
-const async = require('async');
 const AWS = require('aws-sdk');
-const fs = require('fs');
 const randUUID = require('uuid/v4');
+const attr = require('dynamodb-data-types').AttributeValue;
 
 //Read config values from a JSON file.
 AWS.config.loadFromPath('./credentials/aws_secrets.json');
@@ -33,7 +32,7 @@ var put_params = {
 
 var update_params = {
   Key: {},
-  UpdateExpression: "set is_available = :val",
+  UpdateExpression: "set avail = :val",
   ExpressionAttributeValues: {
     ":val": {}
   },
@@ -42,73 +41,81 @@ var update_params = {
 
 
 var successful_response = {
-  "message": "",
-  "S_UUID": "",
-  "P_UUID": ""
+  "Message": "",
+  "SUUID": "",
+  "PUUID": ""
 }
 
-exports.post_byid = (params) => {
+exports.postById = (body) => {
   return new Promise((resolve, reject) => {
-    if (!params|| !params.id || !params.avail) {
+      if (!body || !body.SUUID || !body.PUUID) {
+          return reject("Requirement for the body not satisfied");
+      }
+      const postParams = {
+          TableName: "spot",
+          Item: {}
+      }    
+      const wrappedItems = attr.wrap(body);
+      const randomFloor = String(Math.floor((Math.random() * 4) + 1));
+      postParams.Item = wrappedItems;
+      postParams.Item.avail = {"BOOL": false};
+      postParams.Item.floor = {"N": randomFloor}
+      dynamodb.putItem(postParams, function (err, response) {
+          if (err) {
+              reject(err);
+          }
+          resolve({
+              "Message": "Successfully instantiated " + body.SUUID,
+              "SUUID": body.SUUID,
+              "PUUID": body.PUUID
+          });
+      });
+  });
+};
+
+exports.putById = (params) => {
+  return new Promise((resolve, reject) => {
+    if (!params|| !params.SUUID || !params.avail) {
       return reject("Requirement for the body not satisfied");
     }
-    var S_UUID = params.id;
-    var is_available = params.avail;
-    update_params.Key["S_UUID"] = {"S": S_UUID};
-    update_params.ExpressionAttributeValues[":val"] = {"BOOL": Boolean(is_available)};
+    console.log(params);
+    const SUUID = params.SUUID;
+    const avail = params.avail;
+    update_params.Key["SUUID"] = {"S": SUUID};
+    update_params.ExpressionAttributeValues[":val"] = {"BOOL": Boolean(avail)};
+    console.log(update_params);
     dynamodb.updateItem(update_params, function (err, response) {
       if (err) {
         return reject(err);
       }
-      return resolve("Successfully Updated " + S_UUID + " to " + is_available);
+      return resolve("Successfully Updated " + SUUID + " to " + avail);
     });
   });
 };
 
 
-
-exports.get_byid = (params) => {
+exports.getById = (params) => {
   return new Promise((resolve, reject) => {
     console.log(params);
-    if (!params|| !params.id) {
+    if (!params|| !params.SUUID) {
       return reject("Requirement for the body not satisfied");
     }
-    var S_UUID = params.id;
-    get_params.Key["S_UUID"] = {"S": S_UUID};
+    var SUUID = params.SUUID;
+    get_params.Key["SUUID"] = {"S": SUUID};
     dynamodb.getItem(get_params, function (err, response) {
       if (err) {
         return reject(err);
       }
       if ('{}' === JSON.stringify(response)) {
-        return reject("Error: Unidenfied S_UUID");
+        return reject("Error: Unidenfied SUUID");
       }
       return resolve(response);
     });
   });
 };
 
-exports.create_single_helper = (S_UUID, P_UUID) => {
-  return new Promise((resolve, reject) => {
-    if (!S_UUID || !P_UUID) {
-      return reject("Error");
-     }
-     put_params.Item["S_UUID"] = {"S": S_UUID};
-     put_params.Item["P_UUID"] = {"S": P_UUID};
-     put_params.Item["is_available"] = {"BOOL": true};
-    
-    dynamodb.putItem(put_params, function (err, response) {
-      if (err) {
-        return reject(err);
-      };
-    });
-    successful_response.message = "Successfully created a spot";
-    successful_response.S_UUID = S_UUID;
-    successful_response.P_UUID = P_UUID;
-    return resolve(successful_response);
-  });
-}
 
-exports.delete_by_id = (params) => {
+exports.deleteById = (params) => {
   return new Promise((resolve, reject) => {
     if (!params|| !params.id) {
       return reject("Requirement for the body not satisfied");
