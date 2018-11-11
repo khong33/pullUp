@@ -21,7 +21,7 @@ exports.showProfile = async (req, res, next) => {
     userModel.findByUUID(UUID)
         .then(obj => {
             const unwrappedObj = attr.unwrap(obj.Item);
-            res.render('user', {"item": unwrappedObj})
+            res.send(unwrappedObj);
         })
         .catch(err => next(err));
 }

@@ -3,10 +3,15 @@ const router = express.Router();
 const reservationController = require('../controllers/reservationController');
 
 
+router.get('/:RUUID', reservationController.readReservation);
 router.post('/', reservationController.createReservation);
-router.get('/:UUID', reservationController.readReservation);
-router.put('/', reservationController.updateReservation);
-router.delete('/', reservationController.deleteReservation);
+/*
+    SUUID
+    DATE
+    TIME
+    UUID
+*/
+router.delete('/:RUUID', reservationController.deleteReservation);
 
 
 module.exports = router;
