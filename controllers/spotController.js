@@ -23,4 +23,5 @@ exports.deleteSpot = async (req, res, next) => {
     spotModel.deleteById(req.params, res)
         .then(obj => res.send(obj))
         .catch(err => next(err));
+    // TODO: DELETE SUUID from PUUID Object as well
 }

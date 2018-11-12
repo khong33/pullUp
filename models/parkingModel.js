@@ -102,7 +102,6 @@ exports.getNearBy = (currZip) => {
   });
 };
 
-
 const createSpots = (count) => {
   const spots = [];
   for (i = 0; i < count; i++) {

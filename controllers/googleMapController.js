@@ -1,8 +1,10 @@
+// TODO: Utilize Google Map API for easy Parking-Lot Creation
+
 // const request = require('request');
 
 // exports.getLocationInformation = (req, res, next) => {
 //     const address = req.params.keyword;
-//     const apiKey = "AIzaSyBXhosmlTZH01Aw9hZ2y5WIpoGPEjwiYAE";
+//     const apiKey = ";
 //     let first = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=' + address;
 //     let remain = '&inputtype=textquery&fields=geometry/location,formatted_address,name,opening_hours,rating' + apiKey;
 //     const url = first + remain;

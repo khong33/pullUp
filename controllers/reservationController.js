@@ -23,7 +23,7 @@ exports.readReservation = async (req, res, next) => {
         .catch(err => next(err));
 }
 
-exports.createReservation = async (req, res, next) => {    //reate reservation mapping S_UUID to U_UUID in table
+exports.createReservation = async (req, res, next) => {
     reservationModel.postById(req.body, next)
         .then(obj => res.send(obj))
         .catch(err => next(err));

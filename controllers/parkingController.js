@@ -33,7 +33,7 @@ exports.deleteParkingLot = async (req, res, next) => {
     parkingModel.deleteById(req.params)
         .then(obj => res.send(obj))
         .catch(err => next(err));
-    // TODO: implement delete associated S_UUIDs
+    // TODO: implement delete associated SUUIDs
 }
 
 exports.findNearByParking = async (req, res, next) => {
