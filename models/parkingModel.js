@@ -8,7 +8,7 @@ AWS.config.update(secret.AWS_CREDENTIALS);
 exports.getById = (params) => {
   return new Promise((resolve, reject) => {
     if (!params|| !params.PUUID) {
-      return reject("Requirement for the body not satisfied");
+      return reject("Error: Requirement for the body not satisfied");
     }
     const getParams = {
       Key: {},
@@ -16,11 +16,8 @@ exports.getById = (params) => {
     };
     getParams.Key.PUUID = params.PUUID;
     dynamodb.getItem(getParams, function (err, response) {
-      if (err) {
-        return reject(err);
-      }
-      if ('{}' === JSON.stringify(response)) {
-        return reject("Error: Unidenfied PUUID");
+      if (err || !response || !response.Item || response.Item.length == 0) {
+        return reject("Error: Failed to get specified PUUID's item from the DB");
       }
       return resolve(response);
     });
@@ -29,12 +26,16 @@ exports.getById = (params) => {
 
 exports.postById = (body) => {
   return new Promise((resolve, reject) => {
-    if (!body) {
-      return reject("Requirement for the body not satisfied");
+    if (!body || !body.name || !body.zip || !body.latitude || !body.longitude) {
+      return reject("Error: Requirement for the body not satisfied. Name, zip, latitude, and longitude are required");
     }
-    const spots = createSpots(Number(body.spotCount.S));
+    const spotCount = Number(body.spotCount.S);
+    if (spotCount < 1 || 100 < spotCount) {
+      return reject("Error: Spot count exceeds maximum amount. Minimum is 1 and Maximum is 100");
+    }
+    const spots = createSpots(spotCount);
     const PUUID = randUUID();
-    var postParams = {
+    let postParams = {
       Item: {},
       TableName : 'parking',
     };
@@ -57,7 +58,7 @@ exports.postById = (body) => {
 exports.deleteById = (params) => {
   return new Promise((resolve, reject) => {
     if (!params|| !params.PUUID) {
-      return reject("Requirement for the body not satisfied");
+      return reject("Error: Requirement for the body not satisfied");
     }
     var PUUID = params.PUUID;
     const deleteParams = {
@@ -79,8 +80,8 @@ exports.deleteById = (params) => {
 
 exports.getNearBy = (currZip) => {
   return new Promise((resolve, reject) => {
-      if (!currZip) {
-        return reject("Requirement for the body not satisfied");
+      if (!currZip || !(0 <= Number(currZip)  && Number(currZip) <= 99999)) {
+        return reject("Error: Requirement for the body not satisfied");
       }
       const scanParams = {
         TableName: "parking",
@@ -93,7 +94,7 @@ exports.getNearBy = (currZip) => {
         }
       };
       dynamodb.scan(scanParams, function (err, response) {
-        if (err) {
+        if (err || !response.Item || response.Item.length == 0) {
           return reject("Error: Couldn't retrieve enough information with zip code: " + currZip);
         }
         return resolve(response);

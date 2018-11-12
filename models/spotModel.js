@@ -1,51 +1,9 @@
 const logger = require('../config/logger');
 const secret = require('../config/secret');
 const AWS = require('aws-sdk');
-const randUUID = require('uuid/v4');
 const attr = require('dynamodb-data-types').AttributeValue;
-
-
 AWS.config.update(secret.AWS_CREDENTIALS);
-
-var dynamodb = new AWS.DynamoDB();
-
-var delete_params = {
-  Key: {},
-  TableName : 'spot'
-};
-
-var successful_delete= {
-  "message": "",
-  "S_UUID": ""
-} 
-
-
-var get_params = {
-  Key: {},
-  TableName : 'spot'
-};
-
-var put_params = {
-  Item: {},
-  TableName : 'spot',
-};
-
-
-var update_params = {
-  Key: {},
-  UpdateExpression: "set avail = :val",
-  ExpressionAttributeValues: {
-    ":val": {}
-  },
-  TableName : 'spot',
-};
-
-
-var successful_response = {
-  "Message": "",
-  "SUUID": "",
-  "PUUID": ""
-}
+const dynamodb = new AWS.DynamoDB();
 
 exports.postById = (body) => {
   return new Promise((resolve, reject) => {
@@ -77,13 +35,24 @@ exports.postById = (body) => {
 exports.putById = (params) => {
   return new Promise((resolve, reject) => {
     if (!params|| !params.SUUID || !params.avail) {
-      return reject("Requirement for the body not satisfied");
+      return reject("Error: Requirement for the body not satisfied");
     }
+    const putParams = {
+      Key: {},
+      UpdateExpression: "set avail = :val",
+      ExpressionAttributeValues: {
+        ":val": {}
+      },
+      TableName : 'spot',
+    };
     const SUUID = params.SUUID;
-    const avail = params.avail;
-    update_params.Key["SUUID"] = {"S": SUUID};
-    update_params.ExpressionAttributeValues[":val"] = {"BOOL": Boolean(avail)};
-    dynamodb.updateItem(update_params, function (err, response) {
+    const avail = params.avail.toLowerCase();
+    if (avail !== "true" && avail !== "false") {
+      return reject("Error: Only 'true' or 'false' is used for the update.");
+    }
+    putParams.Key.SUUID = {"S": SUUID};
+    putParams.ExpressionAttributeValues[":val"] = {"BOOL": Boolean(avail)};
+    dynamodb.updateItem(putParams, function (err, response) {
       if (err) {
         return reject(err);
       }
@@ -98,14 +67,15 @@ exports.getById = (params) => {
     if (!params|| !params.SUUID) {
       return reject("Requirement for the body not satisfied");
     }
-    var SUUID = params.SUUID;
-    get_params.Key["SUUID"] = {"S": SUUID};
-    dynamodb.getItem(get_params, function (err, response) {
-      if (err) {
-        return reject(err);
-      }
-      if ('{}' === JSON.stringify(response)) {
-        return reject("Error: Unidenfied SUUID");
+    const SUUID = params.SUUID;
+    let getParams = {
+      Key: {},
+      TableName : 'spot'
+    };
+    getParams.Key.SUUID= {"S": SUUID};
+    dynamodb.getItem(getParams, function (err, response) {
+      if (err || !response.Item || response.Item.length == 0) {
+        return reject("Error: No result found. Unidenfied SUUID");
       }
       return resolve(response);
     });
@@ -115,18 +85,20 @@ exports.getById = (params) => {
 
 exports.deleteById = (params) => {
   return new Promise((resolve, reject) => {
-    if (!params|| !params.id) {
+    if (!params|| !params.SUUID) {
       return reject("Requirement for the body not satisfied");
     }
-    var S_UUID = params.id;
-    delete_params.Key["S_UUID"] = {"S": S_UUID};
-    dynamodb.deleteItem(delete_params, function (err, response) {
+    let deleteParams = {
+      Key: {},
+      TableName : 'spot'
+    };
+    const SUUID = params.SUUID;
+    deleteParams.Key.SUUID = {"S": SUUID};
+    dynamodb.deleteItem(deleteParams, function (err, response) {
       if (err) {
-        return reject("Error: Spot with S_UUID: " + S_UUID + " does not exist");
+        return reject("Error: Spot with SUUID: " + SUUID + " does not exist");
       }
-      successful_delete.message = "Successfully removed a parking lot";
-      successful_delete.S_UUID = S_UUID;
-      return resolve(successful_delete);
+      return resolve("Successfully removed a parking lot");
     });
   });
 };

@@ -25,6 +25,7 @@ app.use('/reservation', reservationRouter);
 
 // catch 404 and forward to error handler
 app.use(function(err, req, res, next) {
+  console.log(err);
   res.status(500).send(err);
 });
 

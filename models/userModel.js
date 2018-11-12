@@ -36,7 +36,7 @@ exports.getById = (UUID) => {
 exports.postById = (body) => {
   return new Promise((resolve, reject) => {
     if (!body|| !body.email || !body.first || !body.last || !body.pw) {
-      return reject("Requirement for the body not satisfied");
+      return reject("Error: Requirement for the body not satisfied");
     }
     // TODO: Make const UUID using the user ID
     // TODO: Hash pw

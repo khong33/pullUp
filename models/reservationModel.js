@@ -10,7 +10,7 @@ AWS.config.update(secret.AWS_CREDENTIALS);
 exports.queryByDateSUUID = (keys) => {
     return new Promise((resolve, reject) => {
         if (!keys || !keys.SUUID || !keys.date) {
-            return reject("Requirement for the body not satisfied");
+            return reject("Error: Requirement for the body not satisfied");
         }
         const params = {
             TableName: "reservation",
@@ -42,7 +42,7 @@ exports.queryByDateSUUID = (keys) => {
 exports.queryByUUID = (UUID) => {
     return new Promise((resolve, reject) => {
         if (!UUID) {
-            return reject("Requirement for the body not satisfied");
+            return reject("Error: Requirement for the body not satisfied");
         }
         const params = {
             TableName: "reservation",
@@ -72,7 +72,7 @@ exports.queryByUUID = (UUID) => {
 exports.queryReservations = (keys) => {
     return new Promise((resolve, reject) => {
         if (!keys || !keys.SUUID || !keys.date) {
-            return reject("Requirement for the body not satisfied");
+            return reject("Error: Requirement for the body not satisfied");
         }
         var params = {
             TableName: "reservation",
@@ -104,12 +104,15 @@ exports.queryReservations = (keys) => {
 exports.postById = (body) => {
     return new Promise((resolve, reject) => {
         if (!body.UUID || !body.SUUID || !body.time || !body.date) {
-            return reject("Requirement for the body not satisfied");
+            return reject("Error: Requirement for the body not satisfied");
+        }
+        if (Number(body.time) > 48) {
+            return reject("Error: Time slot cannot exceed 48");
         }
         const postParams = {
             TableName: "reservation",
             Item: {}
-        }    
+        }
         const RUUID = randUUID();
         const wrappedItems = attr.wrap(body);
         postParams.Item = wrappedItems;
@@ -156,7 +159,7 @@ exports.deleteById = (params) => {
     // TODO: Error Handling when the RUUID item does not exist
     return new Promise((resolve, reject) => {
         if (!params || !params.RUUID) {
-            return reject("Requirement for the body not satisfied");
+            return reject("Error: Requirement for the body not satisfied");
         }
         const deleteParms = {
             TableName: "reservation",

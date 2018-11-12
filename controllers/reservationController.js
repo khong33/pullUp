@@ -28,14 +28,8 @@ exports.createReservation = async (req, res, next) => {    //reate reservation m
         .then(obj => res.send(obj))
         .catch(err => next(err));
 }
-/*
-{
-    "PUUID": ""
-    "SUUID": ""
-    "reservation":
-}
-*/
-exports.deleteReservation = async (req, res, next) => {    //reate reservation mapping S_UUID to U_UUID in table
+
+exports.deleteReservation = async (req, res, next) => {
     reservationModel.deleteById(attr.wrap(req.params), next)
         .then(obj => res.send(attr.unwrap(obj.Item)))
         .catch(err => next(err));
