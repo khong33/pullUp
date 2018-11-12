@@ -79,12 +79,10 @@ exports.putById = (params) => {
     if (!params|| !params.SUUID || !params.avail) {
       return reject("Requirement for the body not satisfied");
     }
-    console.log(params);
     const SUUID = params.SUUID;
     const avail = params.avail;
     update_params.Key["SUUID"] = {"S": SUUID};
     update_params.ExpressionAttributeValues[":val"] = {"BOOL": Boolean(avail)};
-    console.log(update_params);
     dynamodb.updateItem(update_params, function (err, response) {
       if (err) {
         return reject(err);
@@ -97,7 +95,6 @@ exports.putById = (params) => {
 
 exports.getById = (params) => {
   return new Promise((resolve, reject) => {
-    console.log(params);
     if (!params|| !params.SUUID) {
       return reject("Requirement for the body not satisfied");
     }
