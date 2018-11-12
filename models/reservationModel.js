@@ -106,8 +106,8 @@ exports.postById = (body) => {
         if (!body.UUID || !body.SUUID || !body.time || !body.date) {
             return reject("Error: Requirement for the body not satisfied");
         }
-        if (Number(body.time) > 48) {
-            return reject("Error: Time slot cannot exceed 48");
+        if (Number(body.time) < 0 || Number(body.time) > 48) {
+            return reject("Error: Time slot must be in between 0 and 48");
         }
         const postParams = {
             TableName: "reservation",
