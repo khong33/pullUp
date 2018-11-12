@@ -62,7 +62,6 @@ exports.findNearByParking = async (req, res, next) => {
 
 
 const nearbyCalculation = (origin, destinations) => {
-    console.log(destinations);
     for (i = 0; i < destinations.length; i++) {
         const dest = [destinations[i].lat, destinations[i].lon];
         destinations[i]["distance"] = euclidean(origin, dest);
