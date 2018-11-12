@@ -29,7 +29,10 @@ exports.postById = (body) => {
     if (!body || !body.name || !body.zip || !body.latitude || !body.longitude) {
       return reject("Error: Requirement for the body not satisfied. Name, zip, latitude, and longitude are required");
     }
-    const spotCount = Number(body.spotCount.S);
+    const spotCount = 5;
+    if (spotCount) {
+      spotCount = Number(body.spotCount.S);
+    }
     if (spotCount < 1 || 100 < spotCount) {
       return reject("Error: Spot count exceeds maximum amount. Minimum is 1 and Maximum is 100");
     }
@@ -85,9 +88,9 @@ exports.getNearBy = (currZip) => {
       }
       const scanParams = {
         TableName: "parking",
-        FilterExpression: "#address = :zip_",
+        FilterExpression: "#zip = :zip_",
         ExpressionAttributeNames: {
-            "#address": "address",
+            "#zip": "zip",
         },
         ExpressionAttributeValues: {
             ":zip_": {"S": currZip}
