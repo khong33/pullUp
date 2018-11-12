@@ -7,9 +7,10 @@ const userRouter = require('./routes/userRouter');
 const parkingRouter = require('./routes/parkingRouter');
 const spotRouter = require('./routes/spotRouter');
 const reservationRouter = require('./routes/reservationRouter');
+const cors = require('cors');
 
 let app = express();
-
+app.use(cors());
 app.use(morgan('combined'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
