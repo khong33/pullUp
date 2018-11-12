@@ -77,17 +77,30 @@ exports.deleteById = (params) => {
   });
 };
 
-exports.getByCoordinates = (params) => {
-  const currLon = params.lon;
-  const currLat = params.lat;
-  const currZip = params.zip;
-
+exports.getNearBy = (currZip) => {
   return new Promise((resolve, reject) => {
-    if (!params|| !params.lon || !params.lat || !params.zip) {
-      return reject("Requirement for the body not satisfied");
-    }
+      if (!currZip) {
+        return reject("Requirement for the body not satisfied");
+      }
+      const scanParams = {
+        TableName: "parking",
+        FilterExpression: "#address = :zip_",
+        ExpressionAttributeNames: {
+            "#address": "address",
+        },
+        ExpressionAttributeValues: {
+            ":zip_": {"S": currZip}
+        }
+      };
+      dynamodb.scan(scanParams, function (err, response) {
+        if (err) {
+          return reject("Error: Couldn't retrieve enough information with zip code: " + currZip);
+        }
+        return resolve(response);
+      });
   });
 };
+
 
 const createSpots = (count) => {
   const spots = [];

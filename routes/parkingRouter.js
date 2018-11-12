@@ -9,7 +9,7 @@ router.post('/', parkingController.createParkingLot);
 router.get('/:PUUID', parkingController.getParkingLot);
 
 /* GET - request near by parking lots in respect to current location */
-router.get('/:lon/:lat', parkingController.findNearByParking);
+router.get('/', parkingController.findNearByParking);
 
 /* DELETE - delete parking lot object by id */
 router.delete('/:PUUID', parkingController.deleteParkingLot);

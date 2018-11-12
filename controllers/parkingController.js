@@ -1,6 +1,7 @@
 const parkingModel = require('../models/parkingModel');
 const spotController = require('./spotController');
 const attr = require('dynamodb-data-types').AttributeValue;
+const euclidean = require('euclidean-distance');
 
 exports.createParkingLot = async (req, res, next) => {
     body = attr.wrap(req.body);
@@ -36,16 +37,41 @@ exports.deleteParkingLot = async (req, res, next) => {
 }
 
 exports.findNearByParking = async (req, res, next) => {
-    parkingModel.getByCoordinates(req.params)
-        .then(obj => res.send(obj))
+    if (!req.query) {
+        next("Query paramter not set");
+    }
+    const currLat = req.query.lat;
+    const currLon = req.query.lon;
+    const currZip = req.query.zip;
+    if (!currLat || !currLon || !currZip) {
+        next("Latitude, Longitude, Zip are required");
+    }
+    parkingModel.getNearBy(currZip)
+        .then(obj => {return obj})
+        .then(parkingSameZip => {
+            const currCoord = [];
+            currCoord.push(currLat);
+            currCoord.push(currLon);
+            const nearestLots = nearbyCalculation(currCoord, parkingSameZip.Items);
+            res.send(nearestLots);
+        })
         .catch(err => next(err));
 }
 
 
-const findDistance = (origin, destination) => {
-
-//https://maps.googleapis.com/maps/api/distancematrix/json?origins= <ORIGIN> &destinations=San+Francisco|Victoria+BC&key=YOUR_API_KEY
-}
+const nearbyCalculation = (origin, destinations) => {
+    for (i = 0; i < destinations.length; i++) {
+        const dest = [];
+        dest.push(destinations[i].lat.S);
+        dest.push(destinations[i].lon.S);
+        destinations[i]["distance"] = euclidean(origin, dest);
+    }
+    // sort
+    destinations.sort(function(a, b) {
+        return a.dist - b.dist;
+    });
+    return destinations;
+};
 
 
 
