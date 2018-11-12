@@ -29,8 +29,8 @@ exports.postById = (body) => {
     if (!body || !body.name || !body.zip || !body.latitude || !body.longitude) {
       return reject("Error: Requirement for the body not satisfied. Name, zip, latitude, and longitude are required");
     }
-    const spotCount = 5;
-    if (spotCount) {
+    let spotCount = 5;
+    if (body.spotCount) {
       spotCount = Number(body.spotCount.S);
     }
     if (spotCount < 1 || 100 < spotCount) {
@@ -97,7 +97,7 @@ exports.getNearBy = (currZip) => {
         }
       };
       dynamodb.scan(scanParams, function (err, response) {
-        if (err || !response.Item || response.Item.length == 0) {
+        if (err || !response.Items) {
           return reject("Error: Couldn't retrieve enough information with zip code: " + currZip);
         }
         return resolve(response);
