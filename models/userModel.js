@@ -1,7 +1,7 @@
 const secret = require('../config/secret');
 const AWS = require('aws-sdk');
 const randUUID = require('uuid/v4');
-
+const attr = require('dynamodb-data-types').AttributeValue;
 AWS.config.update(secret.AWS_CREDENTIALS);
 const dynamodb = new AWS.DynamoDB();
 
@@ -12,12 +12,12 @@ var update_body = {
 
 exports.getById = (UUID) => {
   return new Promise((resolve, reject) => {
-    dynamodb.getItem(get_params, function (err, response) {
-      let getParams = {
-        Key: {},
-        TableName : 'user'
-      };
-      getParams.Key.UUID = {"S": UUID};
+    let getParams = {
+      Key: {},
+      TableName : 'user'
+    };
+    getParams.Key.UUID = {"S": UUID};
+    dynamodb.getItem(getParams, function (err, response) {
       if (err) {
         return reject(err);
       }
@@ -25,7 +25,9 @@ exports.getById = (UUID) => {
         return reject("Error: Unidenfied UUID");
       }
       let userData = attr.unwrap(response.Item);
-      delete userData.password;
+      if (userData.password) {
+        delete userData.password;
+      }
       return resolve(userData);
     });
   });
