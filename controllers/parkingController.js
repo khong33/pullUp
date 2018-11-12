@@ -49,10 +49,12 @@ exports.findNearByParking = async (req, res, next) => {
     parkingModel.getNearBy(currZip)
         .then(obj => {return obj})
         .then(parkingSameZip => {
-            const currCoord = [];
-            currCoord.push(currLat);
-            currCoord.push(currLon);
-            const nearestLots = nearbyCalculation(currCoord, parkingSameZip.Items);
+            const destObjects = [];
+            const currCoord = [currLat, currLon];
+            for (i = 0; i < parkingSameZip.Items.length; i++) {
+                destObjects.push(attr.unwrap(parkingSameZip.Items[i]));
+            }
+            const nearestLots = nearbyCalculation(currCoord, destObjects);
             res.send(nearestLots);
         })
         .catch(err => next(err));
@@ -60,10 +62,9 @@ exports.findNearByParking = async (req, res, next) => {
 
 
 const nearbyCalculation = (origin, destinations) => {
+    console.log(destinations);
     for (i = 0; i < destinations.length; i++) {
-        const dest = [];
-        dest.push(destinations[i].lat.S);
-        dest.push(destinations[i].lon.S);
+        const dest = [destinations[i].lat, destinations[i].lon];
         destinations[i]["distance"] = euclidean(origin, dest);
     }
     // sort

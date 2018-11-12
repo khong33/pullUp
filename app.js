@@ -24,11 +24,7 @@ app.use('/reservation', reservationRouter);
 
 // catch 404 and forward to error handler
 app.use(function(err, req, res, next) {
-  if (!err.stack) {
-    res.status(500).send(err);
-  } else {
-    res.status(500).send(err.stack);
-  }
+  res.status(500).send(err.message);
 });
 
 app.listen(process.env.PORT || 3000);
