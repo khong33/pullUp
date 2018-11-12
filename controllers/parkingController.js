@@ -40,9 +40,10 @@ exports.findNearByParking = async (req, res, next) => {
     if (!req.query) {
         next("Query paramter not set");
     }
-    const currLat = req.query.lat;
-    const currLon = req.query.lon;
+    const currLat = req.query.latitude;
+    const currLon = req.query.longitude;
     const currZip = req.query.zip;
+    const size = req.query.size;
     if (!currLat || !currLon || !currZip) {
         next("Latitude, Longitude, Zip are required");
     }
@@ -54,12 +55,26 @@ exports.findNearByParking = async (req, res, next) => {
             for (i = 0; i < parkingSameZip.Items.length; i++) {
                 destObjects.push(attr.unwrap(parkingSameZip.Items[i]));
             }
-            const nearestLots = nearbyCalculation(currCoord, destObjects);
-            res.send(nearestLots);
+            let nearByParkingLots = nearbyCalculation(currCoord, destObjects);
+            nearByParkingLots = sizeLimiter(nearByParkingLots, size);
+            res.send(nearByParkingLots);
         })
         .catch(err => next(err));
 }
 
+const sizeLimiter = (nearestLots, size) => {
+    const parkings = [];
+    if (!size) {
+        size = 5;
+    }
+    if (nearestLots.length < size) {
+        size = nearestLots.length;
+    }
+    for (i = 0; i < size; i++) {
+        parkings.push(nearestLots[i]);
+    }
+    return parkings;
+}
 
 const nearbyCalculation = (origin, destinations) => {
     for (i = 0; i < destinations.length; i++) {

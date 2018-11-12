@@ -1,10 +1,14 @@
 const reservationModel = require('../models/reservationModel');
 const attr = require('dynamodb-data-types').AttributeValue;
 
-const queryTimeSlots = async (req, res, next) => {
-    reservationModel.queryByDateSUUID(req.query, next)
-        .then(obj => res.send(obj))
-        .catch(err => next(err));
+exports.queryTimeSlots = async (req, res, next) => {
+    if (req.query && req.query.SUUID && req.query.date) {
+        reservationModel.queryByDateSUUID(req.query, next)
+            .then(obj => res.send(obj))
+            .catch(err => next(err));
+    } else {
+        next("Error: Wrong query parameters");
+    }
 }
 
 exports.queryHistory = async (req, res, next) => {
@@ -14,13 +18,9 @@ exports.queryHistory = async (req, res, next) => {
 }
 
 exports.readReservation = async (req, res, next) => {
-    if (req.query && req.query.SUUID && req.query.date) {
-        queryTimeSlots(req, res, next);
-    } else {
-        reservationModel.getById(attr.wrap(req.params), next)
-            .then(obj => res.send(attr.unwrap(obj.Item)))
-            .catch(err => next(err));
-    }
+    reservationModel.getById(attr.wrap(req.params), next)
+        .then(obj => res.send(attr.unwrap(obj.Item)))
+        .catch(err => next(err));
 }
 
 exports.createReservation = async (req, res, next) => {    //reate reservation mapping S_UUID to U_UUID in table

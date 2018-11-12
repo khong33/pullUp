@@ -11,14 +11,8 @@ exports.createUser = async (req, res, next) => {
 exports.getUser = async (req, res, next) => {
     const UUID = req.params.UUID;
     userModel.getById(UUID)
-        .then(obj => {
-            const userData = attr.unwrap(obj.Item);
-            return userData;
-        })
         .then(userData => {
-            const values = [];
-            values.push(userData);
-            values.push(reservationController.queryHistory(userData.UUID));
+            const values = [userData, reservationController.queryHistory(userData.UUID)];
             return Promise.all(values);
         })
         .then((values) => {
