@@ -12,37 +12,39 @@ CRUD Operations for Parking, Reservation, Spot, User
 
 ## PARKING
 
-* [Create a Parking Lot instance] : `POST /parking`
+* [Create a Parking Lot instance](apidocs/parkingPOST.md) : `POST /parking`
 
-* [Read a Parking Lot by PUUID] : `GET /parking/{PUUID}`
+* [Read a Parking Lot by PUUID](apidocs/parkingGET.md) : `GET /parking/{PUUID}`
 
-* [Read Near By Parking Lots] : `GET /parking` | Params: [latitude, longitude, size]
+* [Read Near By Parking Lots](apidocs/parkingGET.md)  : `GET /parking`
 
-* [Delete a Parking Lot] : `DELETE /parking/{PUUID}`
+* [Delete a Parking Lot](apidocs/parkingDELETE.md)  : `DELETE /parking/{PUUID}`
 
 
 ## RESERVATION
 
-* [Create a reservation] : `POST /reservation`
+* [Create a reservation](apidocs/reservationPOST.md) : `POST /reservation`
 
-* [Read a reservation by RUUID] : `GET /reservation/{RUUID}`
+* [Read a reservation by RUUID](apidocs/reservationGET.md) : `GET /reservation/{RUUID}`
 
-* [Read time slots by SUUID and Date] : `GET /reservation/timeslots` | Params: [SUUID, date]
+* [Read time slots](apidocs/reservationTimeSlotsGET.md) : `GET /reservation/timeslots`
 
-* [Delete a reservation by RUUID] : `DELETE /reservation/{RUUID}`
+* [Delete a reservation by RUUID](apidocs/reservationDELETE.md) : `DELETE /reservation/{RUUID}`
 
 ## SPOT
 
-* [Create a Spot instance] : `POST /spot`
+* [Create a Spot instance](apidocs/spotPOST.md) : `POST /spot`
 
-* [Read a Spot by SUUID] : `GET /spot/{SUUID}`
+* [Read a Spot by SUUID](apidocs/spotGET.md) : `GET /spot/{SUUID}`
 
-* [Update a Spot availability] : `PUT /spot/{STATE}` | STATE: ["true", "false"]
+* [Update a Spot availability](apidocs/spotPUT.md) : `PUT /spot/{STATE}`
 
 ## USER
 
-* [Create a user instance] : `POST /user`
+* [Create a user instance](apidocs/userPOST.md) : `POST /user`
 
-* [Read a user by UUID] : `GET /user/{UUID}`
+* [Read a user by UUID](apidocs/userGET.md) : `GET /user/{UUID}`
 
-* [Delete a user by RUUID] : `DELETE /user/{UUID}`
+* [Update user Information by UUID](apidocs/userPUT.md) : `PUT /user/{UUID}`
+
+* [Delete a user by RUUID](apidocs/userDELETE.md) : `DELETE /user/{UUID}`
