@@ -78,7 +78,7 @@ const sizeLimiter = (nearestLots, size) => {
 
 const nearbyCalculation = (origin, destinations) => {
     for (i = 0; i < destinations.length; i++) {
-        const dest = [destinations[i].lat, destinations[i].lon];
+        const dest = [destinations[i].latitude, destinations[i].longitude];
         destinations[i]["distance"] = euclidean(origin, dest);
     }
     // sort
