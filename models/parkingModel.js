@@ -93,7 +93,7 @@ exports.getNearBy = (currZip) => {
             "#zip": "zip",
         },
         ExpressionAttributeValues: {
-            ":zip_": {"S": currZip}
+            ":zip_": {"S": String(currZip)}
         }
       };
       dynamodb.scan(scanParams, function (err, response) {

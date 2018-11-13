@@ -6,12 +6,13 @@ exports.findZip = (LAT, LON) => {
   return new Promise( (resolve, reject) => {
     let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${LAT},${LON}&key=${secret.GOOGLE_CREDENTIAL}`;
     request(url, (err, res, body) => {
+      const defaultZipcode = 30303;
       if (err || !body) {
-        return reject(err);
+        return resolve(defaultZipcode);
       }
       const results = JSON.parse(body).results;
       if (!results || results.length == 0 || !results[0]) {
-        return reject("Error: Not enough result");
+        return resolve(defaultZipcode);
       }
       const firstAddress = results[0].formatted_address.replace(/,/g, '');
       const elements = firstAddress.split(" ");
