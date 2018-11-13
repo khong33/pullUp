@@ -40,7 +40,7 @@ exports.postById = (body) => {
     }
     // TODO: Make const UUID using the user ID
     // TODO: Hash pw
-    const UUID = randUUID() + body.email
+    const UUID =  "ronald" //randUUID() + body.email
     update_body.Item.UUID = {"S": UUID};
     update_body.Item.email = {"S": (body.email)};
     update_body.Item.first = {"S": (body.first)};
