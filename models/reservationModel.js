@@ -26,7 +26,7 @@ exports.queryByDateSUUID = (keys) => {
         };
         dynamodb.scan(params, function (err, response) {
             if (err || '{}' === JSON.stringify(response)) {
-                return reject("Error Occured during request");
+                return reject("Error: Error occured during request");
             }
             const times = [];
             for (i = 0; i < response.Items.length; i++) {
@@ -88,7 +88,7 @@ exports.queryReservations = (keys) => {
         };
         dynamodb.scan(params, function (err, response) {
             if (err || '{}' === JSON.stringify(response)) {
-                return reject("Error Occured during request");
+                return reject("Error: Error occured during request");
             }
             const times = [];
             for (i = 0; i < response.Items.length; i++) {
@@ -135,7 +135,7 @@ exports.postById = (body) => {
 exports.getById = (params) => {
     return new Promise((resolve, reject) => {
       if (!params|| !params.RUUID) {
-        return reject("Requirement for the body not satisfied");
+        return reject("Error: Requirement for the body not satisfied");
       }
       const getParms = {
           TableName: "reservation",

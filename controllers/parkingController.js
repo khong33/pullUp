@@ -1,4 +1,5 @@
 const parkingModel = require('../models/parkingModel');
+const geoController = require('./geoController');
 const spotController = require('./spotController');
 const attr = require('dynamodb-data-types').AttributeValue;
 const euclidean = require('euclidean-distance');
@@ -38,14 +39,14 @@ exports.deleteParkingLot = async (req, res, next) => {
 
 exports.findNearByParking = async (req, res, next) => {
     if (!req.query) {
-        next("Query paramter not set");
+        next("Error: Query paramter not set");
     }
     const currLat = req.query.latitude;
     const currLon = req.query.longitude;
-    const currZip = req.query.zip;
     const size = req.query.size;
+    const currZip = await geoController.findZip(currLat, currLon);
     if (!currLat || !currLon || !currZip) {
-        next("Latitude, Longitude, Zip are required");
+        next("Error: Latitude, Longitude, Zip are required");
     }
     parkingModel.getNearBy(currZip)
         .then(obj => {return obj})
@@ -79,7 +80,7 @@ const sizeLimiter = (nearestLots, size) => {
 const nearbyCalculation = (origin, destinations) => {
     for (i = 0; i < destinations.length; i++) {
         const dest = [destinations[i].latitude, destinations[i].longitude];
-        destinations[i]["distance"] = euclidean(origin, dest);
+        destinations[i].distance = euclidean(origin, dest);
     }
     // sort
     destinations.sort(function(a, b) {

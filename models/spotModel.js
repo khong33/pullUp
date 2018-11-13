@@ -8,7 +8,7 @@ const dynamodb = new AWS.DynamoDB();
 exports.postById = (body) => {
   return new Promise((resolve, reject) => {
       if (!body || !body.SUUID || !body.PUUID) {
-          return reject("Requirement for the body not satisfied");
+          return reject("Error: Requirement for the body not satisfied");
       }
       const postParams = {
           TableName: "spot",
@@ -65,7 +65,7 @@ exports.putById = (params) => {
 exports.getById = (params) => {
   return new Promise((resolve, reject) => {
     if (!params|| !params.SUUID) {
-      return reject("Requirement for the body not satisfied");
+      return reject("Error: Requirement for the body not satisfied");
     }
     const SUUID = params.SUUID;
     let getParams = {
@@ -86,7 +86,7 @@ exports.getById = (params) => {
 exports.deleteById = (params) => {
   return new Promise((resolve, reject) => {
     if (!params|| !params.SUUID) {
-      return reject("Requirement for the body not satisfied");
+      return reject("Error: Requirement for the body not satisfied");
     }
     let deleteParams = {
       Key: {},
