@@ -24,11 +24,9 @@ exports.getById = (params) => {
   });
 };
 
-exports.postById = (body) => {
+exports.postById = (body, PUUID) => {
   return new Promise((resolve, reject) => {
-    if (!body || !body.name || !body.zip || !body.latitude || !body.longitude) {
-      return reject("Error: Requirement for the body not satisfied. Name, zip, latitude, and longitude are required");
-    }
+
     let spotCount = 5;
     if (body.spotCount) {
       spotCount = Number(body.spotCount.S);
@@ -37,7 +35,6 @@ exports.postById = (body) => {
       return reject("Error: Spot count exceeds maximum amount. Minimum is 1 and Maximum is 100");
     }
     const spots = createSpots(spotCount);
-    const PUUID = randUUID();
     let postParams = {
       Item: {},
       TableName : 'parking',

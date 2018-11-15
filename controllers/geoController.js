@@ -6,7 +6,7 @@ exports.findZip = (LAT, LON) => {
   return new Promise( (resolve, reject) => {
     let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${LAT},${LON}&key=${secret.GOOGLE_CREDENTIAL}`;
     request(url, (err, res, body) => {
-      const defaultZipcode = 30303;
+      const defaultZipcode = 30318;
       if (err || !body) {
         return resolve(defaultZipcode);
       }

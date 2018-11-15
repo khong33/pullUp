@@ -2,7 +2,6 @@ const userController = require('./userController');
 
 
 exports.showAbout = (req, res, next) => {
-    res.render('about');
 }
 
 exports.showLogin = (req, res, next) => {

@@ -1,41 +1,61 @@
-const parkingModel = require('../models/parkingModel');
 const geoController = require('./geoController');
 const spotController = require('./spotController');
+
+const parkingModel = require('../models/parkingModel');
+const spotModel = require('../models/spotModel');
+
+const secretHandler = require('../config/secret');
 const attr = require('dynamodb-data-types').AttributeValue;
 const euclidean = require('euclidean-distance');
 
+
 exports.createParkingLot = async (req, res, next) => {
-    body = attr.wrap(req.body);
-    parkingModel.postById(body)
-        .then(
-            parkingResponse => {
-                const spots = parkingResponse.spots;
-                const promises = [];
-                for (i = 0; i < spots.length; i++) {
-                    let postParam = {};
-                    postParam.PUUID = parkingResponse.PUUID;
-                    postParam.SUUID = spots[i];
-                    promises.push(spotController.createSpot(postParam, res, next))
-                }
-                return (Promise.all(promises), parkingResponse);
-            })
-        .then(obj => res.send(obj))
-        .catch(err => next(err));
+    if (!req.body || !req.body.name || !req.body.zip || 
+        !req.body.latitude || !req.body.longitude) {
+        next("Error: name, zip, latitude, longitude are required.");
+    } else {
+        const PUUID = secretHandler.hasher(req.body.name);
+        parkingModel.postById(attr.wrap(req.body), PUUID)
+            .then(
+                parkingResponse => {
+                    const spots = parkingResponse.spots;
+                    const promises = [];
+                    for (i = 0; i < spots.length; i++) {
+                        let postParam = {};
+                        postParam.PUUID = parkingResponse.PUUID;
+                        postParam.SUUID = spots[i];
+                        promises.push(spotController.createSpot(postParam, res, next))
+                    }
+                    return (Promise.all(promises), parkingResponse);
+                })
+            .then(obj => res.send(obj))
+            .catch(err => next(err));
+    }
 }
 
 exports.getParkingLot = async (req, res, next) => {
-    parms = attr.wrap(req.params);
-    parkingModel.getById(parms)
+    parkingModel.getById(attr.wrap(req.params))
         .then(obj => res.send(attr.unwrap(obj.Item)))
         .catch(err => next(err));
 }
 
 exports.deleteParkingLot = async (req, res, next) => {
-    parkingModel.deleteById(req.params)
-        .then(obj => res.send(obj))
+    parkingModel.getById(attr.wrap(req.params))
+        .then(rawObj => {
+            return attr.unwrap(rawObj.Item);
+        })
+        .then(obj => {
+            const spotArray = obj.spots;
+            const promiseArray = [];
+            for (i = 0; i < spotArray.length; i++) {
+                promiseArray.push(spotModel.deleteById({"SUUID": spotArray[i]}, res));
+            }
+            return Promise.all(promiseArray);
+        })
+        .then(obj => res.send(parkingModel.deleteById(req.params)))
         .catch(err => next(err));
-    // TODO: implement delete associated SUUIDs
 }
+
 
 exports.findNearByParking = async (req, res, next) => {
     if (!req.query) {
@@ -88,7 +108,3 @@ const nearbyCalculation = (origin, destinations) => {
     });
     return destinations;
 };
-
-
-
-

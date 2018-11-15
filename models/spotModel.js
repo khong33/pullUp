@@ -62,12 +62,11 @@ exports.putById = (params) => {
 };
 
 
-exports.getById = (params) => {
+exports.getById = (SUUID) => {
   return new Promise((resolve, reject) => {
-    if (!params|| !params.SUUID) {
+    if (!SUUID) {
       return reject("Error: Requirement for the body not satisfied");
     }
-    const SUUID = params.SUUID;
     let getParams = {
       Key: {},
       TableName : 'spot'
@@ -77,7 +76,8 @@ exports.getById = (params) => {
       if (err || !response.Item || response.Item.length == 0) {
         return reject("Error: No result found. Unidenfied SUUID");
       }
-      return resolve(response);
+      item = attr.unwrap(response.Item);
+      return resolve(item);
     });
   });
 };
