@@ -25,7 +25,7 @@ exports.queryByDateSUUID = (keys) => {
            }
         };
         dynamodb.scan(params, function (err, response) {
-            if (err || !response.Items || response.Items.length == 0) {
+            if (err || !response.Items) {
                 return reject("Error: Error occured during request");
             }
             const times = new Array(48);
