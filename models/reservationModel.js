@@ -4,6 +4,7 @@ const AWS = require('aws-sdk');
 const randUUID = require('uuid/v4');
 const attr = require('dynamodb-data-types').AttributeValue;
 const dynamodb = new AWS.DynamoDB();
+const date = new Date();
 
 AWS.config.update(secret.AWS_CREDENTIALS);
 
@@ -122,8 +123,10 @@ exports.postById = (body) => {
         }
         const RUUID = randUUID();
         const wrappedItems = attr.wrap(body);
+        const timestamp = date.toISOString();
         postParams.Item = wrappedItems;
         postParams.Item.RUUID = {"S": RUUID};
+        postParams.Item.timestamp = {"S": timestamp};
         dynamodb.putItem(postParams, function (err, response) {
             if (err) {
                 reject(err);
@@ -133,7 +136,8 @@ exports.postById = (body) => {
                 "RUUID": RUUID,
                 "SUUID": body.SUUID,
                 "time": body.time,
-                "date": body.date
+                "date": body.date,
+                "timestamp": timestamp
             });
         });
     });
@@ -150,8 +154,8 @@ exports.getById = (params) => {
       }
       getParms.Key.RUUID = params.RUUID;
       dynamodb.getItem(getParms, function (err, response) {
-            if (err) {
-              return reject(err);
+            if (err || !response) {
+              return reject("Error: Invalid response.");
             }
             if ('{}' === JSON.stringify(response)) {
                 return reject("Error: Unidenfied RUUID");
