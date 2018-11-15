@@ -25,15 +25,22 @@ exports.queryByDateSUUID = (keys) => {
            }
         };
         dynamodb.scan(params, function (err, response) {
-            if (err || '{}' === JSON.stringify(response)) {
+            if (err || !response.Items || response.Items.length == 0) {
                 return reject("Error: Error occured during request");
             }
-            const times = [];
-            for (i = 0; i < response.Items.length; i++) {
-                const unwrapped = attr.unwrap(response.Items[i]);
-                times.push(unwrapped.time);
+            const times = new Array(48);
+            for (i = 0; i < times.length; i++) {
+                times[i] = {"id": i, "reserved": false};
             }
-            times.sort();
+            const intervals = [];
+            response.Items.forEach(item => {
+                let i = Number(attr.unwrap(item).time);
+                intervals.push(i);
+            })
+            intervals.forEach(interval => {
+                times[interval].reserved = true;
+                
+            });
             return resolve(times);
         });
     });
