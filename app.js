@@ -24,7 +24,7 @@ app.use((req, res, next) => {
   let token = req.query.token || req.headers['x-access-token'] || req.headers.token;
   let UUID = req.query.UUID || req.headers.uuid;
 
-  if (req.url === '/auth') {
+  if (req.url === '/auth' || req.url === '/registration') {
     next();
   } else if (!token || !UUID) {
     // check header or url parameters or post parameters for token
@@ -52,7 +52,12 @@ app.use((req, res, next) => {
     });
   }
 });
+
+// Before Authentication
 app.post('/auth', userController.authenticateUser);
+app.post('/registration', userController.createUser);
+
+// Post Authentication
 app.use('/user', userRouter);
 app.use('/parking', parkingRouter);
 app.use('/spot', spotRouter);
