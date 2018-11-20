@@ -12,6 +12,7 @@ if (!process.env.GOOGLE_CREDENTIAL) {
     logger.error("Google Credentials Not Found. Export credentials before running the program.");
     process.exit(1);
 }
+
 exports.AWS_CREDENTIALS = {
     "region": "us-east-2",
     "endpoint": "http://dynamodb.us-east-2.amazonaws.com",
@@ -19,7 +20,13 @@ exports.AWS_CREDENTIALS = {
     "secretAccessKey": AWS_SECRETKEY
 }
 exports.GOOGLE_CREDENTIAL = process.env.GOOGLE_CREDENTIAL;
+exports.API_KEY = process.env.API_KEY;
 
 exports.hasher = (value) => {
     return crypto.createHash('md5').update(value).digest("hex");
 }
+
+exports.hashPassword = (password, salt) => {
+    const hash = crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('hex');
+    return hash;
+  };

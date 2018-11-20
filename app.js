@@ -1,13 +1,16 @@
+const secret = require('./config/secret');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
+const userController = require('./controllers/userController');
 const indexRouter = require('./routes/indexRouter');
 const userRouter = require('./routes/userRouter');
 const parkingRouter = require('./routes/parkingRouter');
 const spotRouter = require('./routes/spotRouter');
 const reservationRouter = require('./routes/reservationRouter');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 
 let app = express();
 app.use(cors());
@@ -17,7 +20,41 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use((req, res, next) => {
+  let token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers.token;
+  let UUID = req.body.UUID || req.query.UUID || req.headers.uuid;
+  console.log(req.headers);
+  if (req.url === '/auth') {
+    next();
+  } else if (!token || !UUID) {
+    // check header or url parameters or post parameters for token
+    return res.status(403).send({ 
+      success: false, 
+      message: 'Token and UUID are required in the header' 
+    });
+  } else {
+    // verifies secret and checks exp
+    jwt.verify(token, secret.API_KEY, function(err, decoded) {
+      if (err) {
+        return res.status(403).send({
+          success: false,
+          message: 'Failed to authenticate token.'
+        });
+      } 
+      console.log(decoded);
+      console.log(UUID);
+      if (decoded.UUID != UUID) {
+        return res.status(403).send({
+          success: false,
+          message: 'Wrong UUID for the given token.'
+        });
+      }
+      req.decoded = decoded;
+      next();
+    });
+  }
+});
+app.post('/auth', userController.authenticateUser);
 app.use('/user', userRouter);
 app.use('/parking', parkingRouter);
 app.use('/spot', spotRouter);
