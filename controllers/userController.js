@@ -36,6 +36,7 @@ exports.authenticateUser = async (req, res, next) => {
             res.send({
                 success: true,
                 message: 'Issued Token!',
+                UUID: UUID,
                 token: token
               });
         })
