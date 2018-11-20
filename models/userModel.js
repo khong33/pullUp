@@ -61,9 +61,9 @@ exports.postAccountInfo = (body) => {
       Item: {}
     }
 
-    postParams.Item.UUID = {"S": body.email};
+    postParams.Item.UUID = {"S": body.UUID};
     postParams.Item.password = {"S": hashPassword(body.password)};
-    postParams.Item.email = {"S": body.email};
+    postParams.Item.email = {"S": body.UUID};
     postParams.Item.first = {"S": body.first};
     postParams.Item.last = {"S": body.last};
     postParams.Item.birthday = {"S": body.birthday};

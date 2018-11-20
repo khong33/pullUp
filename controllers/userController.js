@@ -3,7 +3,7 @@ const reservationController = require('./reservationController');
 const attr = require('dynamodb-data-types').AttributeValue;
 
 exports.createUser = async (req, res, next) => {
-    if (!req.body.email || !req.body.password) {
+    if (!req.body.UUID || !req.body.password) {
         next("Error: Not enough information to create a user.")
     }
     userModel.postAccountInfo(req.body, res)
