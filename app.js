@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
   let token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers.token;
   let UUID = req.body.UUID || req.query.UUID || req.headers.uuid;
-  console.log(req.headers);
+
   if (req.url === '/auth') {
     next();
   } else if (!token || !UUID) {
@@ -41,8 +41,6 @@ app.use((req, res, next) => {
           message: 'Failed to authenticate token.'
         });
       } 
-      console.log(decoded);
-      console.log(UUID);
       if (decoded.UUID != UUID) {
         return res.status(403).send({
           success: false,

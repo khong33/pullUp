@@ -10,7 +10,7 @@ exports.authenticateUser = async (req, res, next) => {
     userModel.verifyByUUID(UUID)
         .then(verification => {
             if (verification.isUnique) {
-                res.status(403).send({ 
+                res.send({ 
                     success: false, 
                     message: 'No UUID Found.' 
                   });
@@ -20,7 +20,7 @@ exports.authenticateUser = async (req, res, next) => {
         .then(userData => {
             const hashedPW = secret.hashPassword(req.body.password, UUID + userData.licensePlate);
             if (userData.password != hashedPW) {
-                res.status(403).send({ 
+                res.send({ 
                     success: false, 
                     message: 'Password Not Matching.' 
                   });
@@ -40,12 +40,7 @@ exports.authenticateUser = async (req, res, next) => {
                 token: token
               });
         })
-        .catch(err => {
-            res.status(500).send({
-            success: false,
-            message: 'Failed while creating token'
-            });
-        });
+        .catch(err => next(err));
 }
 
 exports.createUser = async (req, res, next) => {
