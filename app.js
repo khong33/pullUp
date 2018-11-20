@@ -21,8 +21,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
-  let token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers.token;
-  let UUID = req.body.UUID || req.query.UUID || req.headers.uuid;
+  let token = req.query.token || req.headers['x-access-token'] || req.headers.token;
+  let UUID = req.query.UUID || req.headers.uuid;
 
   if (req.url === '/auth') {
     next();
@@ -40,7 +40,7 @@ app.use((req, res, next) => {
           success: false,
           message: 'Failed to authenticate token.'
         });
-      } 
+      }
       if (decoded.UUID != UUID) {
         return res.status(403).send({
           success: false,

@@ -76,10 +76,10 @@ exports.getUser = async (req, res, next) => {
 }
 
 exports.verifyUser = async (req, res, next) => {
-    if (!req.body.UUID) {
+    const UUID = req.params.UUID;
+    if (!UUID) {
         next("Error: Not enough Information in the body");
     }
-    const UUID = req.body.UUID;
     userModel.verifyByUUID(UUID)
         .then(verification => res.send(verification))
         .catch(err => next(err));
