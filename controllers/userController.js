@@ -54,10 +54,18 @@ exports.createUser = async (req, res, next) => {
 
 exports.getUser = async (req, res, next) => {
     const UUID = req.params.UUID;
+    const headerUUID = req.headers.uuid;
     if (!UUID) {
         res.status(500).send({ 
             success: false, 
             message: 'Error: UUID is missing in the params' 
+          });
+    }
+    if (UUID != headerUUID) {
+        res.status(403).send({ 
+            success: false, 
+            message: 'Error: Unauthorized to retrieve the user instance',
+            UUID: UUID 
           });
     }
     userModel.getById(UUID)
@@ -78,7 +86,11 @@ exports.getUser = async (req, res, next) => {
 exports.verifyUser = async (req, res, next) => {
     const UUID = req.params.UUID;
     if (!UUID) {
-        next("Error: Not enough Information in the body");
+        res.status(400).send({ 
+            success: false, 
+            message: 'Error: Parameter UUID is missing.',
+            UUID: UUID 
+          });
     }
     userModel.verifyByUUID(UUID)
         .then(verification => res.send(verification))

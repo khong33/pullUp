@@ -4,7 +4,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const userController = require('./controllers/userController');
-const indexRouter = require('./routes/indexRouter');
 const userRouter = require('./routes/userRouter');
 const parkingRouter = require('./routes/parkingRouter');
 const spotRouter = require('./routes/spotRouter');

@@ -1,5 +1,6 @@
 const reservationModel = require('../models/reservationModel');
 const attr = require('dynamodb-data-types').AttributeValue;
+const secret = require('../config/secret');
 
 exports.queryTimeSlots = async (req, res, next) => {
     if (req.query && req.query.SUUID && req.query.date) {
@@ -18,19 +19,68 @@ exports.queryHistory = async (req, res, next) => {
 }
 
 exports.readReservation = async (req, res, next) => {
-    reservationModel.getById(attr.wrap(req.params), next)
-        .then(obj => res.send(attr.unwrap(obj.Item)))
+    const RUUID = req.params.RUUID;
+    if (!RUUID) {
+        res.status(400).send({
+            success: false,
+            message: "Error: Requirement for the body not satisfied"
+        })
+    }
+    reservationModel.getById(RUUID)
+        .then(response => res.send(response))
         .catch(err => next(err));
 }
 
 exports.createReservation = async (req, res, next) => {
-    reservationModel.postById(req.body, next)
+    const body = req.body;
+    const headerUUID = req.headers.uuid;
+    if (!body.UUID || !body.SUUID || !body.time || !body.date) {
+        res.status(400).send({
+            success: false,
+            message: "Error: Requirement for the body not satisfied",
+        })
+    }
+    if (body.UUID != headerUUID) {
+        res.status(403).send({
+            success: false,
+            message: "Error: Not authorized to create reservation for the specified UUID.",
+        })
+    }
+    const RUUID = secret.hasher(body.SUUID + body.UUID + body.date + body.time);
+    reservationModel.getById(RUUID)
+        .then(response => {
+            if (response.success) {
+                res.status(400).send({
+                    success: false,
+                    message: "Reservation already exists for given parameters"
+                })
+            } else {
+                return reservationModel.postById(RUUID, body);
+            }
+        })
         .then(obj => res.send(obj))
         .catch(err => next(err));
 }
 
 exports.deleteReservation = async (req, res, next) => {
-    reservationModel.deleteById(attr.wrap(req.params), next)
-        .then(obj => res.send(attr.unwrap(obj.Item)))
+    const RUUID = req.params.RUUID;
+    if (!RUUID) {
+        res.status(400).send({
+            success: false,
+            message: "Error: Parameter is missing RUUID.",
+        })
+    }
+    reservationModel.getById(RUUID)
+        .then(response => {
+            if (!response.success) {
+                res.status(400).send({
+                    success: false,
+                    message: "Error: Specified RUUID does not exist.",
+                })
+            } else {
+                return reservationModel.deleteById(RUUID);
+            }
+        })
+        .then(response => res.send(response))
         .catch(err => next(err));
 }

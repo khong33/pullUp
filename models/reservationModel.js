@@ -109,19 +109,18 @@ exports.queryReservations = (keys) => {
     });
 }
 
-exports.postById = (body) => {
+exports.postById = (RUUID, body) => {
     return new Promise((resolve, reject) => {
-        if (!body.UUID || !body.SUUID || !body.time || !body.date) {
-            return reject("Error: Requirement for the body not satisfied");
-        }
         if (Number(body.time) < 0 || Number(body.time) > 48) {
-            return reject("Error: Time slot must be in between 0 and 48");
+            return reject(res.status(400).send({
+                success: fail,
+                message: "Error: Time slot must be in between 0 and 48",
+            }));
         }
         const postParams = {
             TableName: "reservation",
             Item: {}
         }
-        const RUUID = randUUID();
         const wrappedItems = attr.wrap(body);
         const timestamp = date.toISOString();
         postParams.Item = wrappedItems;
@@ -132,57 +131,65 @@ exports.postById = (body) => {
                 reject(err);
             }
             resolve({
-                "Message": "Successfully instantiated " + RUUID,
-                "RUUID": RUUID,
-                "SUUID": body.SUUID,
-                "time": body.time,
-                "date": body.date,
-                "timestamp": timestamp
+                success: true,
+                message: "Successfully instantiated a reservation instance",
+                RUUID: RUUID,
+                SUUID: body.SUUID,
+                time: body.time,
+                date: body.date,
+                timestamp: timestamp
             });
         });
     });
 };
 
-exports.getById = (params) => {
+exports.getById = (RUUID) => {
     return new Promise((resolve, reject) => {
-      if (!params|| !params.RUUID) {
-        return reject("Error: Requirement for the body not satisfied");
-      }
       const getParms = {
           TableName: "reservation",
           Key: {}
       }
-      getParms.Key.RUUID = params.RUUID;
-      dynamodb.getItem(getParms, function (err, response) {
-            if (err || !response) {
-              return reject("Error: Invalid response.");
+      getParms.Key.RUUID = {"S": RUUID};
+      dynamodb.getItem(getParms, (err, response) => {
+            if (err || !response || '{}' === JSON.stringify(response)) {
+                return resolve({
+                    success: false,
+                    message: "No reservation found",
+                    RUUID: RUUID,
+                    
+                });
             }
-            if ('{}' === JSON.stringify(response)) {
-                return reject("Error: Unidenfied RUUID");
-            }
-            return resolve(response);
+            return resolve({
+                success: true,
+                message: "Reservation found",
+                RUUID: RUUID,
+                item: attr.unwrap(response.Item),
+            });
         });
     });
 };
   
 
-exports.deleteById = (params) => {
+exports.deleteById = (RUUID) => {
     // TODO: Error Handling when the RUUID item does not exist
     return new Promise((resolve, reject) => {
-        if (!params || !params.RUUID) {
-            return reject("Error: Requirement for the body not satisfied");
-        }
         const deleteParms = {
             TableName: "reservation",
             Key: {}
         }
-        deleteParms.Key.RUUID = params.RUUID;
+        deleteParms.Key.RUUID = {"S": RUUID};
         dynamodb.deleteItem(deleteParms, function (err, response) {
             if (err) {
-                reject(err);
+                reject({
+                    success: false,
+                    message: "Failed during deletion.",
+                    RUUID: RUUID,
+                });
             }
             resolve({
-                "Message": "Successfully deleted " + params.RUUID
+                success: true,
+                message: "Successfully deleted",
+                RUUID: RUUID,
             });
         });
     });

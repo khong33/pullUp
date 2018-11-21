@@ -18,7 +18,11 @@ exports.getById = (UUID) => {
         return reject(err);
       }
       if ('{}' === JSON.stringify(response)) {
-        return reject("Error: Unidenfied UUID");
+        return reject({
+          success: false,
+          message: "Error: Unidenfied UUID",
+          UUID: UUID
+        });
       }
       let userData = attr.unwrap(response.Item);
       return resolve(userData);
@@ -46,7 +50,6 @@ exports.postAccountInfo = (body) => {
     postParams.Item.carModel = {"S": body.carModel};
     postParams.Item.licensePlate = {"S": body.licensePlate};
     postParams.Item.timestamp = {"S": date.toISOString()};
-    // postParams.Item.paymentInfo = {"S": body.paymentInfo};
     dynamodb.putItem(postParams, function (err) {
       if (err) {
         return reject(err);
@@ -63,13 +66,17 @@ exports.verifyByUUID = (UUID) => {
       TableName : 'user'
     };
     getParams.Key.UUID = {"S": UUID};
-    dynamodb.getItem(getParams, function (err, response) {
+    dynamodb.getItem(getParams, (err, response) => {
       if (err) {
-        return reject(err);
+        return reject({
+          success: false,
+          message: "Error occured. Failed to retrieve user instance from the database."
+        });
       }
       isUnique = false;
       const verificationResult = {
-        "UUID": UUID
+        success: true,
+        UUID: UUID
       }
       if ('{}' === JSON.stringify(response) || !response.Item) {
         verificationResult.isUnique = true;
