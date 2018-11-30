@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
-const userController = require('./controllers/userController');
+const preAuthenticationRouter = require('./routes/preAuthenticationRouter');
 const userRouter = require('./routes/userRouter');
 const parkingRouter = require('./routes/parkingRouter');
 const spotRouter = require('./routes/spotRouter');
@@ -22,8 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
   let token = req.query.token || req.headers['x-access-token'] || req.headers.token;
   let UUID = req.query.UUID || req.headers.uuid;
-
-  if (req.url === '/auth' || req.url === '/registration') {
+  if (req.url === '/auth' || req.url === '/auth/registration') {
     next();
   } else if (!token || !UUID) {
     // check header or url parameters or post parameters for token
@@ -52,11 +51,10 @@ app.use((req, res, next) => {
   }
 });
 
-// Before Authentication
-app.post('/auth', userController.authenticateUser);
-app.post('/registration', userController.createUser);
+
 
 // Post Authentication
+app.use('/auth', preAuthenticationRouter);
 app.use('/user', userRouter);
 app.use('/parking', parkingRouter);
 app.use('/spot', spotRouter);

@@ -39,22 +39,25 @@ exports.postAccountInfo = (body) => {
       TableName: "user",
       Item: {}
     }
-    const UUID = secret.hasher(body.email);
+    const UUID = secret.hasher(body.UUID);
     const hashedPW = secret.hashPassword(body.password, UUID + body.licensePlate);
     postParams.Item.UUID = {"S": UUID};
     postParams.Item.password = {"S": hashedPW};
-    postParams.Item.email = {"S": body.email};
+    postParams.Item.email = {"S": body.UUID};
     postParams.Item.first = {"S": body.first};
     postParams.Item.last = {"S": body.last};
     postParams.Item.birthday = {"S": body.birthday};
     postParams.Item.carModel = {"S": body.carModel};
     postParams.Item.licensePlate = {"S": body.licensePlate};
     postParams.Item.timestamp = {"S": date.toISOString()};
-    dynamodb.putItem(postParams, function (err) {
+    dynamodb.putItem(postParams, function (err, response) {
       if (err) {
         return reject(err);
       }
-      return resolve("Successfully created a user for: " + UUID);
+      return resolve({
+        success: true, 
+        UUID: UUID
+      });
     });
   });
 };

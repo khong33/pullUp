@@ -40,17 +40,27 @@ exports.authenticateUser = async (req, res, next) => {
                 token: token
               });
         })
-        .catch(err => next(err));
+        .catch(err =>res.status(403).send({ 
+            success: false, 
+            message: 'Error: Unauthorized to retrieve the user instance',
+            UUID: UUID}
+        ));
 }
 
 exports.createUser = async (req, res, next) => {
-    if (!req.body.email || !req.body.password) {
-        next("Error: Not enough information to create a user.")
+    if (!req.body.UUID || !req.body.password) {
+        res.status(500).send({ 
+            success: false, 
+            message: 'Error: Failed to create an account'});
     }
-    userModel.postAccountInfo(req.body, res)
+    userModel.postAccountInfo(req.body)
         .then(obj => res.send(obj))
-        .catch(err => next(err));
-}
+        .catch(err => {
+            res.status(500).send({ 
+            success: false, 
+            message: 'Error: Failed to create an account'});
+        });
+    }
 
 exports.getUser = async (req, res, next) => {
     const UUID = req.params.UUID;
