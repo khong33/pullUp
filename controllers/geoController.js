@@ -8,14 +8,17 @@ exports.findZip = (LAT, LON) => {
     request(url, (err, res, body) => {
       const defaultZipcode = 30318;
       if (err || !body) {
+        console.log("here1");
         return resolve(defaultZipcode);
       }
       const results = JSON.parse(body).results;
       if (!results || results.length == 0 || !results[0]) {
+        console.log("here2");
         return resolve(defaultZipcode);
       }
       const firstAddress = results[0].formatted_address.replace(/,/g, '');
       const elements = firstAddress.split(" ");
+      console.log("here3");
       return resolve(elements[elements.length - 2]);
     })
 
