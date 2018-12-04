@@ -96,8 +96,15 @@ exports.deleteReservation = async (req, res, next) => {
                     message: "Error: Specified RUUID does not exist.",
                 })
             } else {
-                return reservationModel.deleteById(RUUID);
+                const SUUID = response.item.SUUID;
+                return spotModel.putById({
+                    SUUID: SUUID,
+                    avail: "true"
+                });
             }
+        })
+        .then((res) => {
+            return reservationModel.deleteById(RUUID);
         })
         .then(response => res.send(response))
         .catch(err => next(err));
