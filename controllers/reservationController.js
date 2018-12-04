@@ -1,4 +1,5 @@
 const reservationModel = require('../models/reservationModel');
+const spotModel = require('../models/spotModel');
 const attr = require('dynamodb-data-types').AttributeValue;
 const secret = require('../config/secret');
 
@@ -59,10 +60,24 @@ exports.createReservation = async (req, res, next) => {
             }
         })
         .then(obj => {
-            // check the reservation time if it's right now, change the avail status
-            res.send(obj)
+            if (obj.date === obj.cdate && obj.time === obj.ctime) {
+                return spotModel.putById({
+                    avail: "true",
+                    SUUID: obj.SUUID,
+                });
+            } else {
+                res.status(200).send(obj);
+            }
         })
-        .catch(err => next(err));
+        .then(obj => {
+            res.status(200).send({
+                success: true,
+                message: "Successfully made reservation"
+            })
+        })
+        .catch(err => {
+            next(err)
+        });
 }
 
 exports.deleteReservation = async (req, res, next) => {

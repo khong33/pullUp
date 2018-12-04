@@ -137,6 +137,8 @@ exports.postById = (RUUID, body) => {
                 SUUID: body.SUUID,
                 time: body.time,
                 date: body.date,
+                ctime: body.ctime,
+                cdate: body.cdate,
                 timestamp: timestamp
             });
         });
