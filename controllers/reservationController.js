@@ -58,7 +58,10 @@ exports.createReservation = async (req, res, next) => {
                 return reservationModel.postById(RUUID, body);
             }
         })
-        .then(obj => res.send(obj))
+        .then(obj => {
+            // check the reservation time if it's right now, change the avail status
+            res.send(obj)
+        })
         .catch(err => next(err));
 }
 
